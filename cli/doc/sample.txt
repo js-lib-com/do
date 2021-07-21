@@ -1,0 +1,69 @@
+do create project -> 
+do create icons
+do destroy project
+do create compo
+do create page
+do open page index -> wood compo open -p index?
+do preview page index -> wood compo preview -p index?
+do rename compo -> wood compo rename
+do delete compo -> wood compo delete
+do resize image
+do convert to pdf
+do set thermostat to 23.5 -> POST http://192.168.1.11/thermostat/setpoint/23.5
+do get thermostat setpoint -> GET http://192.168.1.11/thermostat/setpoint
+do get hera manual -> open browser with hera manual
+do get hera help
+do help hera
+
+do get thermostat setpoint and say it # here consjunction 'and' is pipe operator for chaining two tasks
+
+do display living room temperature on notifications screen
+do get living room temperature and display it on notifications screen
+
+do read living room temperature and display it on notifications screen # pronoun 'it' is used in place on 'living room temperature' that is the object from previous clause
+GET http://192.169.1.11/living-room/temperature (-> 21.5) | POST http://192.168.1.12/living-room/temperature/21.5
+POST http://192.168.1.12/living-room/temperature/{GET http://192.169.1.11/living-room/temperature}
+
+do read living room temperature -> ${living room temperature} = GET http://192.169.1.11/living-room/temperature  
+do display living room temperature -> echo ${living room temperature}
+do display living room temperature on notifications screen -> POST http://192.168.1.12/living-room/temperature/${living room temperature}  
+
+do wood update
+do wood update = wood update -yv
+do project create ?{0} = wtf create project ?{0}
+do turn ${0} living room lights=post http://192.168.1.11/living-room/lights/${0}
+do set hera = http://192.168.1.11/
+do turn ${0} living room lights=post http://${hera}/living-room/lights/${0}
+do list config
+
+do interpreter
+do evaluate
+do repeat 4 times: beep
+do beep 4 times
+
+do repeat 4 times:
+- beep
+- toggle living room lights
+- sleep 1 second
+
+do if living room temperature is greater than 21 celsius degrees then turn off the thermostat
+
+do if living room light is on then turn it off
+do when living room light will be on then turn it off
+do when living room lights will be on then turn them off
+do when living room light will be on, turn it off after 10 minutes
+do when living room lights will be on, turn them off after 10 minutes
+
+do turn off living room light when it will be on
+do turn off living room light 10 minutes after it will be on
+
+do when euro will exceed 4.95 lei then send email to iulian
+
+do when got email from bogdan then display it on notification screen
+do repeat every minute: if have email from bogdan then display it on notification screen
+do repeat at every minute: if there is email from bogdan then display it on notification screen
+
+
+do imperative sentence
+
+do a -b c d e
