@@ -45,7 +45,7 @@ public class Statement {
 
 	public Statement(String... args) throws IOException {
 		log.trace("Statement(args)");
-		
+
 		this.stopWords = new StopWords();
 
 		this.arguments = new ArrayList<>();
@@ -122,13 +122,25 @@ public class Statement {
 		return options;
 	}
 
+	public boolean hasOption(String option, String... aliases) {
+		if (options.contains(option)) {
+			return true;
+		}
+		for (String alias : aliases) {
+			if (options.contains(alias)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean hasTaskHelp() {
 		return taskHelp;
 	}
 
 	private static List<String> parseOptions(List<String> args) {
 		log.trace("parseOptions(args)");
-		
+
 		List<String> options = new ArrayList<>();
 
 		Iterator<String> iterator = args.iterator();

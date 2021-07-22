@@ -105,7 +105,7 @@ public class CLI implements IShell {
 		}
 
 		ITaskInfo info = task.getInfo();
-		if (info != null) {
+		if (statement.hasOption("verbose", "v")) {
 			console.print(taskInfoFormatter, info);
 			console.crlf();
 		}
@@ -163,12 +163,10 @@ public class CLI implements IShell {
 		log.trace("handleFlags(statement)");
 		for (String option : statement.getOptions()) {
 			switch (option) {
-			case "h":
 			case "help":
 				onHelp();
 				break;
 
-			case "v":
 			case "version":
 				onVersion();
 				break;
