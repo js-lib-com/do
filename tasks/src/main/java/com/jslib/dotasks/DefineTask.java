@@ -20,9 +20,6 @@ public class DefineTask extends DoTask {
 		this.tasksRegistry = new TasksRegistry();
 	}
 
-	private String commandPath;
-	private URI taskURI;
-
 	@Override
 	public IParameters parameters() throws Exception {
 		log.trace("parameters()");
@@ -33,22 +30,10 @@ public class DefineTask extends DoTask {
 	}
 
 	@Override
-	public ReturnCode create(IParameters parameters) throws Exception {
-		log.trace("create(parameters)");
-		super.create(parameters);
-		commandPath = parameters.get("command-path");
-		taskURI = parameters.get("task-uri", URI.class);
-		tasksRegistry.load();
-		return ReturnCode.SUCCESS;
-	}
-
-	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
-
-		log.debug("commandPath=%s : taskURI=%s", commandPath, taskURI);
-		tasksRegistry.add(commandPath, taskURI);
-
+		tasksRegistry.load();
+		tasksRegistry.add(parameters.get("command-path"), parameters.get("task-uri", URI.class));
 		return ReturnCode.SUCCESS;
 	}
 

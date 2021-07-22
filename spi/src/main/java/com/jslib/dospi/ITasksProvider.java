@@ -9,7 +9,7 @@ public interface ITasksProvider {
 	 * 
 	 * @return
 	 */
-	Map<String, Class<? extends Task>> getTasks();
+	Map<String, Class<? extends ITask>> getTasks();
 
 	Map<String, String> getScripts();
 	

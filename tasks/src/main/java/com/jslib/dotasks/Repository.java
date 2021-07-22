@@ -3,10 +3,10 @@ package com.jslib.dotasks;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jslib.dospi.Task;
+import com.jslib.dospi.ITask;
 
 public class Repository {
-	public static final Map<String, Class<? extends Task>> TASKS = new HashMap<>();
+	public static final Map<String, Class<? extends ITask>> TASKS = new HashMap<>();
 	static {
 		TASKS.put("add stop words", AddStopWords.class);
 		TASKS.put("define task", DefineTask.class);

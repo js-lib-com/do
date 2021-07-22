@@ -22,23 +22,12 @@ public class DeleteTask extends DoTask {
 		// parameters.define("context-name", Flags.OPTIONAL, String.class);
 	}
 
-	private String commandPath;
-
 	@Override
 	public IParameters parameters() throws Exception {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
 		parameters.define("command-path", String.class);
 		return parameters;
-	}
-
-	@Override
-	public ReturnCode create(IParameters parameters) throws Exception {
-		log.trace("create(parameters)");
-		super.create(parameters);
-		commandPath = parameters.get("command-path");
-		tasksRegistry.load();
-		return ReturnCode.SUCCESS;
 	}
 
 	@Override
@@ -53,9 +42,12 @@ public class DeleteTask extends DoTask {
 		// final String commandPath = data.get("command-path");
 		// final String contextName = data.get("context-name");
 
+		String commandPath = parameters.get("command-path");
+
 		IConsole console = shell.getConsole();
 		console.confirm("Delete task %s", commandPath);
 
+		tasksRegistry.load();
 		tasksRegistry.remove(commandPath);
 		return ReturnCode.SUCCESS;
 	}

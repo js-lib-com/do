@@ -9,7 +9,7 @@ import java.util.Map;
 
 import js.util.Strings;
 
-class Parameters implements IParameters {
+public class Parameters implements IParameters {
 	private final int NO_PARAMETER_POSITION = -1;
 
 	private final Map<String, Parameter<?>> parameters = new LinkedHashMap<>();

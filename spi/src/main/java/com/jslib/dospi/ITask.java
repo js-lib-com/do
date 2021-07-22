@@ -8,11 +8,7 @@ public interface ITask {
 	
 	IParameters parameters() throws Exception;
 
-	ReturnCode create(IParameters parameters) throws Exception;
-
 	ReturnCode execute(IParameters parameters) throws Exception;
-
-	void destroy() throws Exception;
 
 	ITaskInfo getInfo();
 

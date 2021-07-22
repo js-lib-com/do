@@ -35,21 +35,9 @@ public abstract class Processor implements IProcessor {
 		}
 
 		@Override
-		public ReturnCode create(IParameters parameters) throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public ReturnCode execute(IParameters parameters) throws Exception {
 			// TODO Auto-generated method stub
 			return null;
-		}
-
-		@Override
-		public void destroy() throws Exception {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override

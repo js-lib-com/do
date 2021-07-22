@@ -2,8 +2,8 @@ package com.jslib.dotasks;
 
 import java.util.Map;
 
+import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITasksProvider;
-import com.jslib.dospi.Task;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -16,7 +16,7 @@ public class TasksProvider implements ITasksProvider {
 	}
 
 	@Override
-	public Map<String, Class<? extends Task>> getTasks() {
+	public Map<String, Class<? extends ITask>> getTasks() {
 		log.trace("getTasks()");
 		return Repository.TASKS;
 	}

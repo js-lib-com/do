@@ -25,15 +25,9 @@ public class ListTasks extends DoTask {
 	}
 
 	@Override
-	public ReturnCode create(IParameters parameters) throws Exception {
-		log.trace("create(parameters)");
-		tasksRegistry.load();
-		return ReturnCode.SUCCESS;
-	}
-
-	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
+		tasksRegistry.load();
 
 		class MaxTasksCount {
 			int value;

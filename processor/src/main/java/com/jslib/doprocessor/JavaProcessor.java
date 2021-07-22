@@ -21,25 +21,13 @@ class JavaProcessor implements IProcessor {
 	@Override
 	public ITask getTask(URI taskURI) {
 		log.trace("getTask(taskURI)");
-		// taskURI := java:/com.jslib.dotasks.DefineTask
-		//                 |------ path ---------------|
+		// taskURI path starts with separator, e.g. java:/com.jslib.dotasks.DefineTask
 		return Classes.newInstance(taskURI.getPath().substring(1));
 	}
 
 	@Override
 	public ReturnCode execute(ITask task, IParameters parameters) throws Exception {
 		log.trace("execute(task, parameters)");
-
-		try {
-			ReturnCode code = task.create(parameters);
-			if (code != ReturnCode.SUCCESS) {
-				log.debug("Task create fail. Return code: %s", code);
-				return code;
-			}
-
-			return task.execute(parameters);
-		} finally {
-			task.destroy();
-		}
+		return task.execute(parameters);
 	}
 }
