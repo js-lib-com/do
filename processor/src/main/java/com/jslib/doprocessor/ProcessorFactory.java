@@ -2,7 +2,6 @@ package com.jslib.doprocessor;
 
 import java.net.URI;
 
-import com.jslib.dospi.IPrintoutFactory;
 import com.jslib.dospi.IProcessor;
 
 import js.log.Log;
@@ -15,8 +14,8 @@ public class ProcessorFactory {
 		log.trace("ProcessorFactory()");
 	}
 
-	public IProcessor createProcessor(URI taskURI) {
-		log.trace("createProcessor(taskURI)");
+	public IProcessor getProcessor(URI taskURI) {
+		log.trace("getProcessor(taskURI)");
 
 		switch (taskURI.getScheme()) {
 		case "java":

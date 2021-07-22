@@ -3,7 +3,6 @@ package com.jslib.dotasks;
 import java.net.URI;
 
 import com.jslib.docli.TasksRegistry;
-import com.jslib.dospi.Flags;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ReturnCode;
 
@@ -22,7 +21,6 @@ public class DefineTask extends DoTask {
 	}
 
 	private String commandPath;
-	private String contextName;
 	private URI taskURI;
 
 	@Override
@@ -30,7 +28,6 @@ public class DefineTask extends DoTask {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
 		parameters.define("command-path", String.class);
-		parameters.define("context-name", Flags.OPTIONAL, String.class);
 		parameters.define("task-uri", "Task URI", URI.class);
 		return parameters;
 	}
@@ -40,7 +37,6 @@ public class DefineTask extends DoTask {
 		log.trace("create(parameters)");
 		super.create(parameters);
 		commandPath = parameters.get("command-path");
-		contextName = parameters.get("context-name");
 		taskURI = parameters.get("task-uri", URI.class);
 		tasksRegistry.load();
 		return ReturnCode.SUCCESS;
@@ -50,8 +46,8 @@ public class DefineTask extends DoTask {
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
 
-		log.debug("commandPath=%s : contextName=%s : taskURI=%s", commandPath, contextName, taskURI);
-		tasksRegistry.add(commandPath, contextName, taskURI);
+		log.debug("commandPath=%s : taskURI=%s", commandPath, taskURI);
+		tasksRegistry.add(commandPath, taskURI);
 
 		return ReturnCode.SUCCESS;
 	}

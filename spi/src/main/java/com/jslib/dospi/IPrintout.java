@@ -20,5 +20,9 @@ public interface IPrintout {
 
 	void addDefinitionsList(Map<String, String> definitions);
 
+	void addTableHeader(String columnName, String... columnNames);
+
+	void addTableRow(String value, String... values);
+
 	void display();
 }

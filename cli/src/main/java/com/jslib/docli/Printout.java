@@ -71,6 +71,47 @@ public class Printout implements IPrintout {
 	}
 
 	@Override
+	public void addTableHeader(String columnName, String... columnNames) {
+		int[] columnWidths = new int[columnNames.length + 1];
+
+		builder.append("| ");
+		builder.append(columnName);
+		builder.append(" |");
+		columnWidths[0] = columnName.length() + 2;
+
+		for (int i = 0; i < columnNames.length; ++i) {
+			builder.append(" ");
+			builder.append(columnNames[i]);
+			builder.append(" |");
+			columnWidths[i + 1] = columnNames[i].length() + 2;
+		}
+		builder.append("\r\n");
+
+		builder.append('|');
+		for (int columnWidth : columnWidths) {
+			for (int i = 0; i < columnWidth; ++i) {
+				builder.append('-');
+			}
+			builder.append('|');
+		}
+		builder.append("\r\n");
+	}
+
+	@Override
+	public void addTableRow(String value, String... values) {
+		builder.append("| ");
+		builder.append(value);
+		builder.append(" |");
+
+		for (int i = 0; i < values.length; ++i) {
+			builder.append(" ");
+			builder.append(values[i]);
+			builder.append(" |");
+		}
+		builder.append("\r\n");
+	}
+
+	@Override
 	public void display() {
 		try {
 			console.print(builder.toString());

@@ -24,6 +24,11 @@ public abstract class Processor implements IProcessor {
 		}
 
 		@Override
+		public boolean isExecutionContext() {
+			return true;
+		}
+
+		@Override
 		public IParameters parameters() throws Exception {
 			// TODO Auto-generated method stub
 			return null;

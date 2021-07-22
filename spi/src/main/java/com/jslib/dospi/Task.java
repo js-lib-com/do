@@ -15,7 +15,6 @@ public abstract class Task implements ITask {
 
 	private final IParameters parameters = new Parameters();
 
-	protected ITaskContext context;
 	protected IFileUtils files;
 	protected IHttpRequest httpRequest;
 
@@ -59,6 +58,6 @@ public abstract class Task implements ITask {
 	@Override
 	public String help() throws Exception {
 		log.trace("help()");
-		return null;
+		return String.format("# %s help not implemented", getClass().getCanonicalName());
 	}
 }

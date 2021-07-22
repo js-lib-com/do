@@ -9,6 +9,11 @@ abstract class DoTask extends Task implements ITaskInfo {
 	private static final LocalDate LAST_UPDATE = LocalDate.of(2021, 7, 20);
 
 	@Override
+	public boolean isExecutionContext() {
+		return true;
+	}
+
+	@Override
 	public ITaskInfo getInfo() {
 		return this;
 	}

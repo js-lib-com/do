@@ -2,21 +2,18 @@ package com.jslib.docli;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IForm;
-import com.jslib.dospi.IFormatter;
 import com.jslib.dospi.IParameterDefinition;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
-import com.jslib.dospi.IPrintoutFactory;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
-import com.jslib.dospi.ITaskContext;
 import com.jslib.dospi.ITaskInfo;
-import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.UserCancelException;
 
@@ -33,16 +30,13 @@ public class CLI implements IShell {
 
 	private final Converter converter;
 	private final Console console;
-	private final IPrintoutFactory printoutFactory;
 	private final ProcessorFactory processorFactory;
 	private final TasksRegistry registry;
-	private final TasksProviderSet providers;
 
 	public CLI(Console console) {
 		log.trace("CLI(console)");
 		this.converter = ConverterRegistry.getConverter();
 		this.console = console;
-		this.printoutFactory = new PrintoutFactory(this.console);
 		this.processorFactory = new ProcessorFactory();
 		this.registry = new TasksRegistry();
 		try {
@@ -51,7 +45,6 @@ public class CLI implements IShell {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.providers = new TasksProviderSet();
 	}
 
 	@Override
@@ -78,35 +71,31 @@ public class CLI implements IShell {
 		// search for tasks mapped to command defined by given statement
 		// increment statement parameters offset for every command word
 		// statement parameters offset is used below, when set values for parameters list
-		ContextTasks tasks = registry.search(statement.iterator(), word -> {
+		List<URI> taskURIs = registry.search(statement.iterator(), word -> {
 			statement.incrementParametersOffset();
 		});
-		log.debug("tasks=%s", tasks);
-		if (tasks == null) {
-			log.warn("Statement '%s' not found.", statement);
-			log.warn("Use 'do define task %s' to create it.", statement);
+		log.debug("tasks=%s", taskURIs);
+		if (taskURIs == null) {
+			log.warn("Command '%s' not found.", statement);
+			log.warn("Use define task to create it.");
 			return ReturnCode.NO_COMMAND;
 		}
 
-		URI taskURI = null;
-		ITaskContext taskContext = null;
-		for (ITasksProvider provider : providers) {
-			if (!provider.isInContext()) {
-				continue;
+		IProcessor processor = null;
+		ITask task = null;
+		for (URI taskURI : taskURIs) {
+			processor = processorFactory.getProcessor(taskURI);
+			task = processor.getTask(taskURI);
+			if (task.isExecutionContext()) {
+				break;
 			}
-			if (tasks.has(provider.getContextName())) {
-				taskURI = tasks.get(provider.getContextName());
-				taskContext = provider.getTaskContext();
-			}
+			task = null;
 		}
-		if (taskURI == null) {
+		if (task == null) {
 			return ReturnCode.NO_TASK;
 		}
 
-		log.debug("Executing task %s ...", taskURI);
-
-		IProcessor processor = processorFactory.createProcessor(taskURI);
-		ITask task = processor.getTask(taskURI);
+		log.debug("Executing task %s ...", task);
 		task.setShell(this);
 
 		if (statement.hasTaskHelp()) {

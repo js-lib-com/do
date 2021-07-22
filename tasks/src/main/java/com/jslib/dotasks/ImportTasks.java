@@ -24,8 +24,6 @@ public class ImportTasks extends DoTask {
 		this.tasksRegistry = new TasksRegistry();
 	}
 
-	private String contextName;
-
 	@Override
 	public IParameters parameters() throws Exception {
 		log.trace("parameters()");
@@ -38,7 +36,6 @@ public class ImportTasks extends DoTask {
 	public ReturnCode create(IParameters parameters) throws Exception {
 		log.trace("create(parameters)");
 		super.create(parameters);
-		contextName = parameters.get("context-name");
 		tasksRegistry.load();
 		return ReturnCode.SUCCESS;
 	}
@@ -48,13 +45,11 @@ public class ImportTasks extends DoTask {
 		log.trace("execute(parameters)");
 
 		for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {
-			if (contextName == null || contextName.equals(provider.getContextName())) {
-				final Map<String, Class<? extends Task>> tasks = provider.getTasks();
-				for (String commandPath : tasks.keySet()) {
-					final URI taskReference = URI.create("java:" + tasks.get(commandPath).getCanonicalName());
-					log.info("Import task %s:%s.", provider.getContextName(), taskReference);
-					tasksRegistry.add(commandPath, provider.getContextName(), taskReference);
-				}
+			final Map<String, Class<? extends Task>> tasks = provider.getTasks();
+			for (String commandPath : tasks.keySet()) {
+				final URI taskURI = URI.create("java:" + tasks.get(commandPath).getCanonicalName());
+				log.info("Import task %s.", taskURI);
+				tasksRegistry.add(commandPath, taskURI);
 			}
 		}
 		return ReturnCode.SUCCESS;

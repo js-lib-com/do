@@ -1,5 +1,7 @@
 package com.jslib.dotasks;
 
+import java.net.URI;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -33,33 +35,37 @@ public class ListTasks extends DoTask {
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
 
-		Map<String, Map<String, String>> tasks = new TreeMap<>();
+		class MaxTasksCount {
+			int value;
+		}
+
+		Map<String, List<URI>> tasks = new TreeMap<>();
+		final MaxTasksCount maxTasksCount = new MaxTasksCount();
 		tasksRegistry.list(command -> {
-			for (String contextName : command.tasks.keySet()) {
-				log.debug("contextName=%s : tasks=%s", contextName, command.tasks);
-				Map<String, String> contextTasks = tasks.get(contextName(contextName));
-				if (contextTasks == null) {
-					contextTasks = new TreeMap<>();
-					tasks.put(contextName(contextName), contextTasks);
-				}
-				contextTasks.put(command.path, command.tasks.get(contextName).toString());
+			if (maxTasksCount.value < command.tasks.size()) {
+				maxTasksCount.value = command.tasks.size();
 			}
+			tasks.put(command.path, command.tasks);
 		});
 
+		String[] columns = new String[maxTasksCount.value];
+		for (int i = 0; i < columns.length; ++i) {
+			columns[i] = "Task URI";
+		}
+
 		IPrintout printout = shell.getPrintout();
-		for (String contextName : tasks.keySet()) {
-			printout.addHeading2(contextName);
-			for (String commandPath : tasks.get(contextName).keySet()) {
-				printout.addUnorderedItem(commandPath);
+		printout.addTableHeader("Command Path", columns);
+
+		for (String commandPath : tasks.keySet()) {
+			List<URI> taskURIs = tasks.get(commandPath);
+			for (int i = 0; i < columns.length; ++i) {
+				columns[i] = i < taskURIs.size() ? taskURIs.get(i).toASCIIString() : "";
 			}
+			printout.addTableRow(commandPath, columns);
 		}
 		printout.display();
 
 		return ReturnCode.SUCCESS;
-	}
-
-	private static String contextName(String contextName) {
-		return contextName == null ? "global" : contextName;
 	}
 
 	@Override

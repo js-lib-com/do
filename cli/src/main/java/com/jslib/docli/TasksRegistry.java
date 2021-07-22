@@ -7,9 +7,10 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.Stack;
@@ -45,7 +46,7 @@ public class TasksRegistry {
 	public void load() throws IOException {
 		log.trace("load()");
 		if (!Files.exists(file)) {
-			add("define task", null, URI.create("java:/com.jslib.dotasks.DefineTask"));
+			add("define task", URI.create("java:/com.jslib.dotasks.DefineTask"));
 		}
 		try (Reader reader = Files.newBufferedReader(file)) {
 			TasksRegistry tree = json.parse(reader, getClass());
@@ -60,12 +61,12 @@ public class TasksRegistry {
 		}
 	}
 
-	public void add(String command, String contextName, URI taskURI) throws IOException {
-		add(Arrays.asList(command.split(" ")).iterator(), contextName, taskURI);
+	public void add(String command, URI taskURI) throws IOException {
+		add(Arrays.asList(command.split(" ")).iterator(), taskURI);
 	}
 
-	public void add(Iterator<String> command, String contextName, URI taskURI) throws IOException {
-		log.trace("add(command, contextName, taskURI)");
+	public void add(Iterator<String> command, URI taskURI) throws IOException {
+		log.trace("add(command, taskURI)");
 		Params.notNull(taskURI, "Task URI");
 
 		Node node = add(root, command);
@@ -73,9 +74,9 @@ public class TasksRegistry {
 			throw new IllegalStateException("Sub-commands not supported.");
 		}
 		if (node.tasks == null) {
-			node.tasks = new HashMap<>();
+			node.tasks = new ArrayList<>();
 		}
-		node.tasks.put(contextName, taskURI);
+		node.tasks.add(taskURI);
 
 		save();
 	}
@@ -103,13 +104,13 @@ public class TasksRegistry {
 		return add(child, words);
 	}
 
-	public void remove(String command, String contextName) throws IOException {
-		log.trace("remove(command, contextName)");
-		remove(root, Arrays.asList(command.split(" ")).iterator(), contextName);
+	public void remove(String command) throws IOException {
+		log.trace("remove(command)");
+		remove(root, Arrays.asList(command.split(" ")).iterator());
 		save();
 	}
 
-	private static void remove(Node node, Iterator<String> command, String contextName) {
+	private static void remove(Node node, Iterator<String> command) {
 		if (node.children == null) {
 			// exception?
 			return;
@@ -122,9 +123,9 @@ public class TasksRegistry {
 		}
 
 		if (!command.hasNext()) {
-			child.tasks.remove(contextName);
+			child.tasks = null;
 		} else {
-			remove(child, command, contextName);
+			remove(child, command);
 		}
 
 		if (child.isEmpty()) {
@@ -138,10 +139,10 @@ public class TasksRegistry {
 		}
 	}
 
-	public ContextTasks search(Iterator<String> words, WordFoundListener listener) {
+	public List<URI> search(Iterator<String> words, WordFoundListener listener) {
 		log.trace("search(words, listener)");
 		Node node = search(root, words, listener);
-		return node != null ? node.tasks != null ? new ContextTasks(node.tasks) : null : null;
+		return node != null ? node.tasks : null;
 	}
 
 	private static Node search(Node node, Iterator<String> words, WordFoundListener listener) {
@@ -189,7 +190,7 @@ public class TasksRegistry {
 		// Node parent;
 
 		SortedMap<String, Node> children;
-		HashMap<String, URI> tasks;
+		List<URI> tasks;
 
 		boolean isEmpty() {
 			return (children == null || children.isEmpty()) && (tasks == null || tasks.isEmpty());
@@ -207,9 +208,9 @@ public class TasksRegistry {
 
 	public static class Command {
 		public final String path;
-		public final HashMap<String, URI> tasks;
+		public final List<URI> tasks;
 
-		public Command(String path, HashMap<String, URI> tasks) {
+		public Command(String path, List<URI> tasks) {
 			this.path = path;
 			this.tasks = tasks;
 		}

@@ -29,11 +29,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import js.util.Classes;
-import js.util.Strings;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TasksRegistryTest {
-	private static final String JSON = "{\"root\":{\"children\":{\"a\":{\"children\":{\"b\":{\"children\": null,\"tasks\":{null:\"java:/Task\"}}},\"tasks\": null}},\"tasks\": null}}";
+	private static final String JSON = "{\"root\":{\"children\":{\"a\":{\"children\":{\"b\":{\"children\": null,\"tasks\":[\"java:/Task\"]}},\"tasks\": null}},\"tasks\": null}}";
 
 	@Mock
 	private TasksRegistry.WordFoundListener listener;
@@ -54,30 +53,30 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		registry.add(words, null, URI.create("java:/Task"));
+		registry.add(words, URI.create("java:/Task"));
 
 		// then
 		words = Arrays.asList("a", "b").iterator();
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/Task")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
 	}
 
 	@Test
-	public void GivenExistingCommand_WhenAdd_ThenReplace() throws IOException {
+	public void GivenExistingCommand_WhenAdd_ThenAppend() throws IOException {
 		// given
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		registry.add(words, null, URI.create("java:/ReplaceTask"));
+		registry.add(words, URI.create("java:/ReplaceTask"));
 
 		// then
 		words = Arrays.asList("a", "b").iterator();
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/ReplaceTask")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
 	}
 
 	@Test
@@ -86,14 +85,14 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "c").iterator();
 
 		// when
-		registry.add(words, null, URI.create("java:/AlternativeTask"));
+		registry.add(words, URI.create("java:/AlternativeTask"));
 
 		// then
 		words = Arrays.asList("a", "c").iterator();
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/AlternativeTask")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/AlternativeTask")));
 	}
 
 	@Test
@@ -102,14 +101,14 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "c", "d").iterator();
 
 		// when
-		registry.add(words, null, URI.create("java:/AlternativeTask"));
+		registry.add(words, URI.create("java:/AlternativeTask"));
 
 		// then
 		words = Arrays.asList("a", "c", "d").iterator();
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/AlternativeTask")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/AlternativeTask")));
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -118,7 +117,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a").iterator();
 
 		// when
-		registry.add(words, null, URI.create("java:/Task"));
+		registry.add(words, URI.create("java:/Task"));
 
 		// then
 	}
@@ -129,7 +128,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b", "c").iterator();
 
 		// when
-		registry.add(words, null, URI.create("java:/Task"));
+		registry.add(words, URI.create("java:/Task"));
 
 		// then
 	}
@@ -140,11 +139,11 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/Task")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
 	}
 
 	@Test
@@ -153,7 +152,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -165,11 +164,11 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b", "p").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/Task")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
 
 		ArgumentCaptor<String> wordCaptor = ArgumentCaptor.forClass(String.class);
 		verify(listener, times(2)).onWordFound(wordCaptor.capture());
@@ -182,7 +181,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "c").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -194,7 +193,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("c").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -206,7 +205,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -219,7 +218,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -230,7 +229,7 @@ public class TasksRegistryTest {
 		// given
 
 		// when
-		registry.remove("a b", null);
+		registry.remove("a b");
 
 		// then
 		assertThat(registry._root().children, notNullValue());
@@ -258,15 +257,15 @@ public class TasksRegistryTest {
 		Path file = Paths.get("src/test/resources/tasks.json");
 		Files.delete(file);
 		TasksRegistry registry = new TasksRegistry(file);
-		
+
 		// when
 		registry.load();
-		
+
 		// then
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/com.jslib.dotasks.DefineTask")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.dotasks.DefineTask")));
 	}
 
 	@Test
@@ -278,28 +277,13 @@ public class TasksRegistryTest {
 		registry.load();
 
 		// when
-		registry.add("list tasks", null, URI.create("java:/com.jslib.dotasks.ListTasks"));
+		registry.add("list tasks", URI.create("java:/com.jslib.dotasks.ListTasks"));
 
 		// then
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
-		ContextTasks tasks = registry.search(words, listener);
+		List<URI> tasks = registry.search(words, listener);
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(null), equalTo(URI.create("java:/com.jslib.dotasks.DefineTask")));
-	}
-
-	@Test
-	public void GivenComplexTasks_WhenSearch_ThenGetTask() throws Exception {
-		// given
-		registry = new TasksRegistry();
-		registry._load(Classes.getResourceAsString("complex-tasks.json"));
-		Iterator<String> words = Arrays.asList("build", "project").iterator();
-
-		// when
-		ContextTasks tasks = registry.search(words, listener);
-
-		// then
-		assertThat(tasks, notNullValue());
-		assertThat(tasks.get("wood"), equalTo(URI.create("java:/com.jslib.wood.tasks.BuildProject")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.dotasks.DefineTask")));
 	}
 
 	public void Given_When_Then() {

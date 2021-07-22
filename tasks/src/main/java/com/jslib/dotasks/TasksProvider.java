@@ -2,7 +2,6 @@ package com.jslib.dotasks;
 
 import java.util.Map;
 
-import com.jslib.dospi.ITaskContext;
 import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.Task;
 
@@ -14,24 +13,6 @@ public class TasksProvider implements ITasksProvider {
 
 	public TasksProvider() {
 		log.trace("TasksProvider()");
-	}
-
-	@Override
-	public boolean isInContext() {
-		log.trace("isInContext()");
-		return true;
-	}
-
-	@Override
-	public String getContextName() {
-		log.trace("getContextName()");
-		return null;
-	}
-
-	@Override
-	public ITaskContext getTaskContext() {
-		log.trace("getTaskContext()");
-		return null;
 	}
 
 	@Override
