@@ -15,6 +15,7 @@ import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
 import com.jslib.dospi.ReturnCode;
+import com.jslib.dospi.TaskAbortException;
 import com.jslib.dospi.UserCancelException;
 
 import js.converter.Converter;
@@ -92,6 +93,7 @@ public class CLI implements IShell {
 			task = null;
 		}
 		if (task == null) {
+			log.warn("No task found for statement: %s", statement.getCommand());
 			return ReturnCode.NO_TASK;
 		}
 
@@ -116,6 +118,9 @@ public class CLI implements IShell {
 		} catch (UserCancelException e) {
 			log.info("User cancel.");
 			return ReturnCode.CANCEL;
+		} catch (TaskAbortException e) {
+			log.warn(e.getMessage());
+			return ReturnCode.ABORT;
 		}
 	}
 
