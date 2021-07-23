@@ -1,15 +1,8 @@
 package com.jslib.docli;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.fusesource.jansi.AnsiConsole;
 
@@ -87,42 +80,6 @@ public class Main {
 		}
 
 		return cli.execute(statement);
-	}
-
-	private ReturnCode executeScript(URI taskURI) throws Exception {
-		log.trace("executeScript(taskURI)");
-
-		Path homeDir = Paths.get(Home.getPath());
-		// task URI path starts with path separator
-		Path scriptFile = homeDir.resolve("script" + taskURI.getPath());
-		log.debug("Execute script %s", scriptFile);
-
-		try (BufferedReader reader = new BufferedReader(Files.newBufferedReader(scriptFile))) {
-			String info = reader.readLine();
-			console.print(info);
-
-			List<String> statements = new ArrayList<>();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				line = line.trim();
-				if (line.isEmpty()) {
-					continue;
-				}
-				for (String statement : line.split("\\.")) {
-					statement = statement.toLowerCase().trim();
-					if (!statement.isEmpty()) {
-						statements.add(statement);
-					}
-				}
-			}
-
-			for (String statement : statements) {
-				log.debug(statement);
-				execute(statement.split(" "));
-			}
-		}
-
-		return ReturnCode.SUCCESS;
 	}
 
 	private void onException(Throwable t) {

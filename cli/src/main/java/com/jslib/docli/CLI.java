@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IForm;
@@ -11,6 +12,7 @@ import com.jslib.dospi.IParameterDefinition;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
+import com.jslib.dospi.IProcessorFactory;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
@@ -31,14 +33,15 @@ public class CLI implements IShell {
 
 	private final Converter converter;
 	private final Console console;
-	private final ProcessorFactory processorFactory;
+	private final IProcessorFactory processorFactory;
 	private final TasksRegistry registry;
 
 	public CLI(Console console) {
 		log.trace("CLI(console)");
 		this.converter = ConverterRegistry.getConverter();
 		this.console = console;
-		this.processorFactory = new ProcessorFactory();
+		this.processorFactory = new CliProcessorFactory(this);
+
 		this.registry = new TasksRegistry();
 		try {
 			this.registry.load();
@@ -46,6 +49,11 @@ public class CLI implements IShell {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public IProcessorFactory getProcessorFactory() {
+		return processorFactory;
 	}
 
 	@Override
@@ -187,5 +195,21 @@ public class CLI implements IShell {
 	private void onVersion() {
 		log.trace("onVersion()");
 		console.print("Do CLI - 0.0.1-SNAPSHOT");
+	}
+
+	private static class CliProcessorFactory extends ProcessorFactory {
+		private final IProcessor scriptProcessor;
+
+		public CliProcessorFactory(CLI cli) {
+			this.scriptProcessor = new ScriptProcessor(cli);
+		}
+
+		@Override
+		public IProcessor getProcessor(URI taskURI) {
+			if (taskURI.getScheme().equals("file") && taskURI.getPath().endsWith(".do")) {
+				return scriptProcessor;
+			}
+			return super.getProcessor(taskURI);
+		}
 	}
 }

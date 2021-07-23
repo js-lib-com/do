@@ -3,17 +3,19 @@ package com.jslib.doprocessor;
 import java.net.URI;
 
 import com.jslib.dospi.IProcessor;
+import com.jslib.dospi.IProcessorFactory;
 
 import js.log.Log;
 import js.log.LogFactory;
 
-public class ProcessorFactory {
+public class ProcessorFactory implements IProcessorFactory {
 	private static final Log log = LogFactory.getLog(ProcessorFactory.class);
 
 	public ProcessorFactory() {
 		log.trace("ProcessorFactory()");
 	}
 
+	@Override
 	public IProcessor getProcessor(URI taskURI) {
 		log.trace("getProcessor(taskURI)");
 

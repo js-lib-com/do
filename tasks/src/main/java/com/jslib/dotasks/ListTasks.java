@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.jslib.docli.TasksRegistry;
-import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
+import com.jslib.dospi.IProcessorFactory;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ReturnCode;
 
@@ -40,7 +40,7 @@ public class ListTasks extends DoTask {
 		IPrintout printout = shell.getPrintout();
 		printout.addTableHeader("Command Path", "Task URI", "Task Description");
 
-		ProcessorFactory factory = new ProcessorFactory();
+		IProcessorFactory factory = shell.getProcessorFactory();
 		for (String commandPath : tasks.keySet()) {
 			for (URI taskURI : tasks.get(commandPath)) {
 				IProcessor processor = factory.getProcessor(taskURI);
