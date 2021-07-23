@@ -1,6 +1,7 @@
 package com.jslib.doprocessor;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
@@ -42,8 +43,7 @@ public abstract class Processor implements IProcessor {
 
 		@Override
 		public ITaskInfo getInfo() {
-			// TODO Auto-generated method stub
-			return null;
+			return new TaskInfo();
 		}
 
 		@Override
@@ -51,5 +51,38 @@ public abstract class Processor implements IProcessor {
 			// TODO Auto-generated method stub
 			return null;
 		}
+	}
+
+	private static class TaskInfo implements ITaskInfo {
+
+		@Override
+		public String getDisplay() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getDescription() {
+			return "TODO: add task description.";
+		}
+
+		@Override
+		public String getVersion() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public LocalDate getLastUpdate() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getAuthor() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 }

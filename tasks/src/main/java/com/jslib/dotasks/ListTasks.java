@@ -6,8 +6,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.jslib.docli.TasksRegistry;
+import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
+import com.jslib.dospi.IProcessor;
+import com.jslib.dospi.ITask;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -29,33 +32,21 @@ public class ListTasks extends DoTask {
 		log.trace("execute(parameters)");
 		tasksRegistry.load();
 
-		class MaxTasksCount {
-			int value;
-		}
-
 		Map<String, List<URI>> tasks = new TreeMap<>();
-		final MaxTasksCount maxTasksCount = new MaxTasksCount();
 		tasksRegistry.list(command -> {
-			if (maxTasksCount.value < command.tasks.size()) {
-				maxTasksCount.value = command.tasks.size();
-			}
 			tasks.put(command.path, command.tasks);
 		});
 
-		String[] columns = new String[maxTasksCount.value];
-		for (int i = 0; i < columns.length; ++i) {
-			columns[i] = "Task URI";
-		}
-
 		IPrintout printout = shell.getPrintout();
-		printout.addTableHeader("Command Path", columns);
+		printout.addTableHeader("Command Path", "Task URI", "Task Description");
 
+		ProcessorFactory factory = new ProcessorFactory();
 		for (String commandPath : tasks.keySet()) {
-			List<URI> taskURIs = tasks.get(commandPath);
-			for (int i = 0; i < columns.length; ++i) {
-				columns[i] = i < taskURIs.size() ? taskURIs.get(i).toASCIIString() : "";
+			for (URI taskURI : tasks.get(commandPath)) {
+				IProcessor processor = factory.getProcessor(taskURI);
+				ITask task = processor.getTask(taskURI);
+				printout.addTableRow(commandPath, taskURI.toASCIIString(), task.getInfo().getDescription());
 			}
-			printout.addTableRow(commandPath, columns);
 		}
 		printout.display();
 

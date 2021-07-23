@@ -37,6 +37,9 @@ public class ProcessorFactory {
 		case "http-rmi":
 			return new HttpRmiProcessor();
 
+		case "file":
+			return new JavaScriptProcessor();
+
 		default:
 			throw new IllegalStateException("Missing processor for scheme " + taskURI.getScheme());
 		}
