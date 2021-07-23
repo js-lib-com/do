@@ -46,6 +46,7 @@ public class Logging {
 		}
 
 		ConsoleAppender appender = new ConsoleAppender();
+		appender.setName("console");
 		appender.setLayout(layout);
 		appender.setTarget(ConsoleAppender.SYSTEM_OUT);
 		appender.setThreshold(level);
@@ -54,5 +55,11 @@ public class Logging {
 		Logger root = LogManager.getRootLogger();
 		root.setLevel(Level.ALL);
 		root.addAppender(appender);
+	}
+
+	public static void setVerbose(boolean verbose) {
+		Logger root = LogManager.getRootLogger();
+		ConsoleAppender appender = (ConsoleAppender) root.getAppender("console");
+		appender.setThreshold(verbose ? Level.INFO : Level.WARN);
 	}
 }

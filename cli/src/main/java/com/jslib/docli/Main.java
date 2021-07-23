@@ -76,7 +76,8 @@ public class Main {
 
 		if (statement.isEmpty()) {
 			REPL repl = new REPL(console, cli);
-			return repl.loop();
+			repl.loop();
+			return ReturnCode.SUCCESS;
 		}
 
 		return cli.execute(statement);

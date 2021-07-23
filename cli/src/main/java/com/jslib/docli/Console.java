@@ -52,6 +52,12 @@ public class Console implements IConsole {
 		System.out.println(formatter.format(object));
 	}
 
+	public String prompt(String message) {
+		System.out.print(message);
+		System.out.print(": ");
+		return readLine();
+	}
+
 	public String input(String message, String... defaultValue) {
 		System.out.print("- ");
 		System.out.print(message);
@@ -73,10 +79,10 @@ public class Console implements IConsole {
 		String action = String.format(format, args);
 		System.out.print(action);
 		System.out.print(": yes | [no]: ");
-		
+
 		String answer = readLine();
 		System.out.println();
-		
+
 		if (!answer.equalsIgnoreCase("yes")) {
 			throw new UserCancelException(action);
 		}
