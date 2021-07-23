@@ -2,7 +2,6 @@ package com.jslib.docli;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +25,8 @@ public class MainTest {
 	}
 
 	@Mock
+	private CLI cli;
+	@Mock
 	private TasksRegistry.WordFoundListener listener;
 
 	private TasksRegistry tasksRegistry;
@@ -35,7 +36,7 @@ public class MainTest {
 	public void beforeTest() throws Exception {
 		tasksRegistry = new TasksRegistry();
 		tasksRegistry._load("{\"root\":{}}");
-		main = new Main();
+		main = new Main(cli);
 	}
 
 	@Test

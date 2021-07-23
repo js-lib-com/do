@@ -17,11 +17,8 @@ import js.log.LogFactory;
 public class ImportTasks extends DoTask {
 	private static final Log log = LogFactory.getLog(ImportTasks.class);
 
-	private final TasksRegistry tasksRegistry;
-
 	public ImportTasks() {
 		log.trace("ImportTasks()");
-		this.tasksRegistry = new TasksRegistry();
 	}
 
 	@Override
@@ -35,14 +32,15 @@ public class ImportTasks extends DoTask {
 	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
-		tasksRegistry.load();
+		TasksRegistry registry = new TasksRegistry();
+		registry.load();
 
 		for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {
 			final Map<String, Class<? extends ITask>> tasks = provider.getTasks();
 			for (String commandPath : tasks.keySet()) {
 				final URI taskURI = URI.create("java:" + tasks.get(commandPath).getCanonicalName());
 				log.info("Import task %s.", taskURI);
-				tasksRegistry.add(commandPath, taskURI);
+				registry.add(commandPath, taskURI);
 			}
 		}
 		return ReturnCode.SUCCESS;

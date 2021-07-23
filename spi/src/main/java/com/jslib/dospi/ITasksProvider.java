@@ -4,6 +4,8 @@ import java.util.Map;
 
 public interface ITasksProvider {
 
+	String getName();
+
 	/**
 	 * Return provider task classes mapped by recommended command path.
 	 * 
@@ -12,5 +14,5 @@ public interface ITasksProvider {
 	Map<String, Class<? extends ITask>> getTasks();
 
 	Map<String, String> getScripts();
-	
+
 }

@@ -12,12 +12,9 @@ import js.log.LogFactory;
 public class DefineTask extends DoTask {
 	private static final Log log = LogFactory.getLog(DefineTask.class);
 
-	private final TasksRegistry tasksRegistry;
-
 	public DefineTask() {
 		super();
 		log.trace("DefineTask()");
-		this.tasksRegistry = new TasksRegistry();
 	}
 
 	@Override
@@ -32,8 +29,9 @@ public class DefineTask extends DoTask {
 	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
-		tasksRegistry.load();
-		tasksRegistry.add(parameters.get("command-path"), parameters.get("task-uri", URI.class));
+		TasksRegistry registry = new TasksRegistry();
+		registry.load();
+		registry.add(parameters.get("command-path"), parameters.get("task-uri", URI.class));
 		return ReturnCode.SUCCESS;
 	}
 

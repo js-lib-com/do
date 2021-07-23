@@ -41,14 +41,11 @@ public class CLI implements IShell {
 		this.converter = ConverterRegistry.getConverter();
 		this.console = console;
 		this.processorFactory = new CliProcessorFactory(this);
-
 		this.registry = new TasksRegistry();
-		try {
-			this.registry.load();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	}
+
+	public void load() throws IOException {
+		this.registry.load();
 	}
 
 	@Override
@@ -206,7 +203,7 @@ public class CLI implements IShell {
 
 		@Override
 		public IProcessor getProcessor(URI taskURI) {
-			if (taskURI.getScheme().equals("file") && taskURI.getPath().endsWith(".do")) {
+			if ("file".equals(taskURI.getScheme()) && taskURI.getPath() != null && taskURI.getPath().endsWith(".do")) {
 				return scriptProcessor;
 			}
 			return super.getProcessor(taskURI);

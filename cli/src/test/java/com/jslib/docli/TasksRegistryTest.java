@@ -18,8 +18,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +31,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import js.util.Classes;
+import com.jslib.dospi.IParameters;
+import com.jslib.dospi.IShell;
+import com.jslib.dospi.ITask;
+import com.jslib.dospi.ITaskInfo;
+import com.jslib.dospi.ITasksProvider;
+import com.jslib.dospi.ReturnCode;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TasksRegistryTest {
@@ -255,7 +263,9 @@ public class TasksRegistryTest {
 	public void GivenFileDoesNotExit_WhenLoad_ThenDefineTask() throws IOException {
 		// given
 		Path file = Paths.get("src/test/resources/tasks.json");
-		Files.delete(file);
+		if (Files.exists(file)) {
+			Files.delete(file);
+		}
 		TasksRegistry registry = new TasksRegistry(file);
 
 		// when
@@ -265,14 +275,16 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
 		List<URI> tasks = registry.search(words, listener);
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.dotasks.DefineTask")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.docli.TasksRegistryTest.DefineTask")));
 	}
 
 	@Test
 	public void GivenFileDoesNotExist_WhenAdd_ThenKeepDefineTask() throws IOException {
 		// given
 		Path file = Paths.get("src/test/resources/tasks.json");
-		Files.delete(file);
+		if (Files.exists(file)) {
+			Files.delete(file);
+		}
 		TasksRegistry registry = new TasksRegistry(file);
 		registry.load();
 
@@ -283,7 +295,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
 		List<URI> tasks = registry.search(words, listener);
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.dotasks.DefineTask")));
+		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.docli.TasksRegistryTest.DefineTask")));
 	}
 
 	public void Given_When_Then() {
@@ -292,5 +304,55 @@ public class TasksRegistryTest {
 		// when
 
 		// then
+	}
+
+	private static class DefineTask implements ITask {
+		@Override
+		public void setShell(IShell shell) {
+		}
+
+		@Override
+		public boolean isExecutionContext() {
+			return false;
+		}
+
+		@Override
+		public IParameters parameters() throws Exception {
+			return null;
+		}
+
+		@Override
+		public ReturnCode execute(IParameters parameters) throws Exception {
+			return null;
+		}
+
+		@Override
+		public ITaskInfo getInfo() {
+			return null;
+		}
+
+		@Override
+		public String help() throws Exception {
+			return null;
+		}
+	}
+
+	public static class TasksProvider implements ITasksProvider {
+		@Override
+		public String getName() {
+			return "built-in";
+		}
+
+		@Override
+		public Map<String, Class<? extends ITask>> getTasks() {
+			Map<String, Class<? extends ITask>> tasks = new HashMap<>();
+			tasks.put("define task", DefineTask.class);
+			return tasks;
+		}
+
+		@Override
+		public Map<String, String> getScripts() {
+			return Collections.emptyMap();
+		}
 	}
 }

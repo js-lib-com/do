@@ -12,9 +12,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.SortedMap;
 import java.util.Stack;
 import java.util.TreeMap;
+
+import com.jslib.dospi.ITasksProvider;
 
 import js.json.Json;
 import js.lang.Callback;
@@ -36,17 +39,20 @@ public class TasksRegistry {
 	public TasksRegistry() {
 		log.trace("TasksRegistry()");
 		this.json = Classes.loadService(Json.class);
-
-		Path homeDir = Paths.get(Home.getPath());
-		this.file = homeDir.resolve("bin/" + TasksRegistry.FILE_NAME);
-
+		this.file = Paths.get(Home.getPath()).resolve("bin/" + TasksRegistry.FILE_NAME);
 		this.root = new Node();
 	}
 
 	public void load() throws IOException {
 		log.trace("load()");
 		if (!Files.exists(file)) {
-			add("define task", URI.create("java:/com.jslib.dotasks.DefineTask"));
+			for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {
+				if ("built-in".equalsIgnoreCase(provider.getName())) {
+					for (String command : provider.getTasks().keySet()) {
+						add(command, URI.create("java:/" + provider.getTasks().get(command).getCanonicalName()));
+					}
+				}
+			}
 		}
 		try (Reader reader = Files.newBufferedReader(file)) {
 			TasksRegistry tree = json.parse(reader, getClass());
@@ -215,7 +221,7 @@ public class TasksRegistry {
 			this.tasks = tasks;
 		}
 	}
-
+	
 	// --------------------------------------------------------------------------------------------
 
 	TasksRegistry(Path file) {

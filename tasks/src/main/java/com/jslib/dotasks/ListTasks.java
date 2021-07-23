@@ -19,21 +19,19 @@ import js.log.LogFactory;
 public class ListTasks extends DoTask {
 	private static final Log log = LogFactory.getLog(ListTasks.class);
 
-	private final TasksRegistry tasksRegistry;
-
 	public ListTasks() {
 		super();
 		log.trace("ListTasks()");
-		this.tasksRegistry = new TasksRegistry();
 	}
 
 	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
-		tasksRegistry.load();
+		TasksRegistry registry = new TasksRegistry();
+		registry.load();
 
 		Map<String, List<URI>> tasks = new TreeMap<>();
-		tasksRegistry.list(command -> {
+		registry.list(command -> {
 			tasks.put(command.path, command.tasks);
 		});
 

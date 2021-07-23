@@ -11,11 +11,8 @@ import js.log.LogFactory;
 public class DeleteTask extends DoTask {
 	private static final Log log = LogFactory.getLog(DeleteTask.class);
 
-	private final TasksRegistry tasksRegistry;
-
 	public DeleteTask() {
 		log.trace("DeleteTask()");
-		this.tasksRegistry = new TasksRegistry();
 
 		// IParameters parameters = shell.getParameters();
 		// parameters.define("command-path", String.class);
@@ -47,8 +44,9 @@ public class DeleteTask extends DoTask {
 		IConsole console = shell.getConsole();
 		console.confirm("Delete task %s", commandPath);
 
-		tasksRegistry.load();
-		tasksRegistry.remove(commandPath);
+		TasksRegistry registry = new TasksRegistry();
+		registry.load();
+		registry.remove(commandPath);
 		return ReturnCode.SUCCESS;
 	}
 

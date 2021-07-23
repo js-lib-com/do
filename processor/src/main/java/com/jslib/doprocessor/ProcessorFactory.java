@@ -7,6 +7,7 @@ import com.jslib.dospi.IProcessorFactory;
 
 import js.log.Log;
 import js.log.LogFactory;
+import js.util.Params;
 
 public class ProcessorFactory implements IProcessorFactory {
 	private static final Log log = LogFactory.getLog(ProcessorFactory.class);
@@ -18,6 +19,8 @@ public class ProcessorFactory implements IProcessorFactory {
 	@Override
 	public IProcessor getProcessor(URI taskURI) {
 		log.trace("getProcessor(taskURI)");
+		Params.notNull(taskURI, "Task URI");
+		Params.notNull(taskURI.getScheme(), "Task URI scheme");
 
 		switch (taskURI.getScheme()) {
 		case "java":

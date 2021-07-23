@@ -12,9 +12,9 @@ public class REPL {
 	private final Console console;
 	private final CLI cli;
 
-	public REPL(Console console, CLI cli) {
-		log.trace("REPL(console, cli)");
-		this.console = console;
+	public REPL(CLI cli) {
+		log.trace("REPL(cli)");
+		this.console = (Console) cli.getConsole();
 		this.cli = cli;
 	}
 

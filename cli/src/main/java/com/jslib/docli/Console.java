@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.fusesource.jansi.AnsiConsole;
-
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IFormatter;
 import com.jslib.dospi.UserCancelException;
@@ -14,10 +12,6 @@ import js.lang.BugError;
 
 public class Console implements IConsole {
 	private static final BufferedReader STDIN = new BufferedReader(new InputStreamReader(System.in));
-
-	public Console() {
-		AnsiConsole.systemInstall();
-	}
 
 	@Override
 	public void print(String format, Object... args) {

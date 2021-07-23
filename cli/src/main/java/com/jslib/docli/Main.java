@@ -23,8 +23,12 @@ public class Main {
 		long start = System.nanoTime();
 		ReturnCode returnCode = ReturnCode.SUCCESS;
 
-		Main main = new Main();
+		Console console = new Console();
+		CLI cli = new CLI(console);
+		Main main = new Main(cli);
+
 		try {
+			cli.load();
 			returnCode = main.execute(args);
 		} catch (IOException e) {
 			main.onException(e);
@@ -44,16 +48,14 @@ public class Main {
 
 	// --------------------------------------------------------------------------------------------
 
-	private final Console console;
 	private final CLI cli;
 
 	private boolean stackTrace;
 	private boolean processingTime;
 
-	Main() {
-		log.trace("Main()");
-		this.console = new Console();
-		this.cli = new CLI(this.console);
+	Main(CLI cli) {
+		log.trace("Main(cli)");
+		this.cli = cli;
 	}
 
 	private ReturnCode execute(String... args) throws Exception {
@@ -69,13 +71,14 @@ public class Main {
 
 			case "s":
 			case "stack-trace":
+			case "trace":
 				stackTrace = true;
 				break;
 			}
 		}
 
 		if (statement.isEmpty()) {
-			REPL repl = new REPL(console, cli);
+			REPL repl = new REPL(cli);
 			repl.loop();
 			return ReturnCode.SUCCESS;
 		}
@@ -87,7 +90,7 @@ public class Main {
 		if (stackTrace) {
 			StringWriter buffer = new StringWriter();
 			t.printStackTrace(new PrintWriter(buffer));
-			console.print(buffer.toString());
+			cli.getConsole().print(buffer.toString());
 		} else {
 			StringBuilder message = new StringBuilder();
 			message.append(t.getClass().getSimpleName());
@@ -95,7 +98,7 @@ public class Main {
 				message.append(": ");
 				message.append(t.getMessage());
 			}
-			console.print(message.toString());
+			cli.getConsole().print(message.toString());
 		}
 	}
 

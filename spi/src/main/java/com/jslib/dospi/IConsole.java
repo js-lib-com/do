@@ -14,5 +14,5 @@ public interface IConsole {
 	 * @throws UserCancelException if user denies the action.
 	 */
 	void confirm(String format, Object... args) throws UserCancelException;
-
+	
 }
