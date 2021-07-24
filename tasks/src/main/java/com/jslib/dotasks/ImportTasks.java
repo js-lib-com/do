@@ -44,16 +44,18 @@ public class ImportTasks extends DoTask {
 
 		String providerName = parameters.get("provider-name");
 		for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {
-			if(providerName != null && !provider.getName().equalsIgnoreCase(providerName)) {
+			if (providerName != null && !provider.getName().equalsIgnoreCase(providerName)) {
 				continue;
 			}
-			
+
 			final Map<String, URI> tasks = provider.getTasks();
 			for (String commandPath : tasks.keySet()) {
 				final URI taskURI = tasks.get(commandPath);
-				log.info("Import task %s", taskURI);
-				registry.add(commandPath, taskURI);
+				if (!registry.add(commandPath, taskURI)) {
+					continue;
+				}
 
+				log.info("Import task %s", taskURI);
 				if ("file".equals(taskURI.getScheme())) {
 					// script file URI path starts with path separator
 					Path scriptFile = scriptDir.resolve(taskURI.getPath().substring(1));

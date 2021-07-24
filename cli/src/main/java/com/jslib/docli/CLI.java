@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Collection;
 
 import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.doprocessor.ProcessorFactory;
@@ -84,7 +84,7 @@ public class CLI implements IShell {
 		// search for tasks mapped to command defined by given statement
 		// increment statement parameters offset for every command word
 		// statement parameters offset is used below, when set values for parameters list
-		List<URI> taskURIs = registry.search(statement.iterator(), word -> {
+		Collection<URI> taskURIs = registry.search(statement.iterator(), word -> {
 			statement.incrementParametersOffset();
 		});
 		log.debug("tasks=%s", taskURIs);

@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -19,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -65,10 +68,11 @@ public class TasksRegistryTest {
 
 		// then
 		words = Arrays.asList("a", "b").iterator();
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/Task")));
 	}
 
 	@Test
@@ -81,10 +85,12 @@ public class TasksRegistryTest {
 
 		// then
 		words = Arrays.asList("a", "b").iterator();
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
+		assertThat(tasks, hasSize(2));
+		assertThat(tasks, hasItem(URI.create("java:/Task")));
+		assertThat(tasks, hasItem(URI.create("java:/ReplaceTask")));
 	}
 
 	@Test
@@ -97,10 +103,11 @@ public class TasksRegistryTest {
 
 		// then
 		words = Arrays.asList("a", "c").iterator();
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/AlternativeTask")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/AlternativeTask")));
 	}
 
 	@Test
@@ -113,10 +120,11 @@ public class TasksRegistryTest {
 
 		// then
 		words = Arrays.asList("a", "c", "d").iterator();
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/AlternativeTask")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/AlternativeTask")));
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -147,11 +155,12 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/Task")));
 	}
 
 	@Test
@@ -160,7 +169,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -172,11 +181,12 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b", "p").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/Task")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/Task")));
 
 		ArgumentCaptor<String> wordCaptor = ArgumentCaptor.forClass(String.class);
 		verify(listener, times(2)).onWordFound(wordCaptor.capture());
@@ -189,7 +199,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "c").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -201,7 +211,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("c").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -213,7 +223,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -226,7 +236,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 
 		// then
 		assertThat(tasks, nullValue());
@@ -273,9 +283,10 @@ public class TasksRegistryTest {
 
 		// then
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.docli.TasksRegistryTest.DefineTask")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/com.jslib.docli.TasksRegistryTest.DefineTask")));
 	}
 
 	@Test
@@ -293,9 +304,10 @@ public class TasksRegistryTest {
 
 		// then
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
-		List<URI> tasks = registry.search(words, listener);
+		Collection<URI> tasks = registry.search(words, listener);
 		assertThat(tasks, notNullValue());
-		assertThat(tasks.get(0), equalTo(URI.create("java:/com.jslib.docli.TasksRegistryTest.DefineTask")));
+		assertThat(tasks, hasSize(1));
+		assertThat(tasks, hasItem(URI.create("java:/com.jslib.docli.TasksRegistryTest.DefineTask")));
 	}
 
 	public void Given_When_Then() {

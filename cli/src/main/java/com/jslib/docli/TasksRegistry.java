@@ -7,15 +7,16 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.jslib.dospi.ITasksProvider;
 
@@ -67,11 +68,11 @@ public class TasksRegistry {
 		}
 	}
 
-	public void add(String command, URI taskURI) throws IOException {
-		add(Arrays.asList(command.split(" ")).iterator(), taskURI);
+	public boolean add(String command, URI taskURI) throws IOException {
+		return add(Arrays.asList(command.split(" ")).iterator(), taskURI);
 	}
 
-	public void add(Iterator<String> command, URI taskURI) throws IOException {
+	public boolean add(Iterator<String> command, URI taskURI) throws IOException {
 		log.trace("add(command, taskURI)");
 		Params.notNull(taskURI, "Task URI");
 
@@ -80,11 +81,12 @@ public class TasksRegistry {
 			throw new IllegalStateException("Sub-commands not supported.");
 		}
 		if (node.tasks == null) {
-			node.tasks = new ArrayList<>();
+			node.tasks = new TreeSet<>();
 		}
-		node.tasks.add(taskURI);
 
+		boolean updated = node.tasks.add(taskURI);
 		save();
+		return updated;
 	}
 
 	private static Node add(Node node, Iterator<String> words) {
@@ -145,7 +147,7 @@ public class TasksRegistry {
 		}
 	}
 
-	public List<URI> search(Iterator<String> words, WordFoundListener listener) {
+	public Collection<URI> search(Iterator<String> words, WordFoundListener listener) {
 		log.trace("search(words, listener)");
 		Node node = search(root, words, listener);
 		return node != null ? node.tasks : null;
@@ -196,7 +198,7 @@ public class TasksRegistry {
 		// Node parent;
 
 		SortedMap<String, Node> children;
-		List<URI> tasks;
+		SortedSet<URI> tasks;
 
 		boolean isEmpty() {
 			return (children == null || children.isEmpty()) && (tasks == null || tasks.isEmpty());
@@ -214,14 +216,14 @@ public class TasksRegistry {
 
 	public static class Command {
 		public final String path;
-		public final List<URI> tasks;
+		public final SortedSet<URI> tasks;
 
-		public Command(String path, List<URI> tasks) {
+		public Command(String path, SortedSet<URI> tasks) {
 			this.path = path;
 			this.tasks = tasks;
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------
 
 	TasksRegistry(Path file) {

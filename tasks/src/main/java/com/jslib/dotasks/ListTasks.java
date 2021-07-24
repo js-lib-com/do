@@ -1,8 +1,8 @@
 package com.jslib.dotasks;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
 
 import com.jslib.docli.TasksRegistry;
@@ -30,7 +30,7 @@ public class ListTasks extends DoTask {
 		TasksRegistry registry = new TasksRegistry();
 		registry.load();
 
-		Map<String, List<URI>> tasks = new TreeMap<>();
+		Map<String, SortedSet<URI>> tasks = new TreeMap<>();
 		registry.list(command -> {
 			tasks.put(command.path, command.tasks);
 		});
