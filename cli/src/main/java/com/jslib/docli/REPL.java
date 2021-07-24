@@ -28,6 +28,9 @@ public class REPL {
 		String statement;
 		for (;;) {
 			switch ((statement = console.prompt("do"))) {
+			case "":
+				continue;
+				
 			case "exit":
 				return;
 
