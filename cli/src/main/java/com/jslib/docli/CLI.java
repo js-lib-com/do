@@ -31,7 +31,7 @@ import js.log.LogFactory;
 public class CLI implements IShell {
 	private static final Log log = LogFactory.getLog(CLI.class);
 
-	private static final TaskInfoFormatter taskInfoFormatter = new TaskInfoFormatter();
+	private static final TaskInfoFormatter TASK_INFO_FOMRATTER = new TaskInfoFormatter();
 
 	private final Converter converter;
 	private final Console console;
@@ -89,8 +89,7 @@ public class CLI implements IShell {
 		});
 		log.debug("tasks=%s", taskURIs);
 		if (taskURIs == null) {
-			log.warn("Command '%s' not found.", statement);
-			log.warn("Use define task to create it.");
+			log.warn("Statement '%s' not defined. See 'define task'.", statement);
 			return ReturnCode.NO_COMMAND;
 		}
 
@@ -99,14 +98,14 @@ public class CLI implements IShell {
 		for (URI taskURI : taskURIs) {
 			processor = processorFactory.getProcessor(taskURI);
 			task = processor.getTask(taskURI);
-			if (task.isExecutionContext()) {
+			if(task.isExecutionContext()) {
 				break;
 			}
 			task = null;
 		}
-		if (task == null) {
-			log.warn("No task found for statement: %s", statement.getCommand());
-			return ReturnCode.NO_TASK;
+		if(task == null) {
+			log.warn("Not proper execution context for statement '%s'.", statement.getCommand());
+			return ReturnCode.ABORT;
 		}
 
 		log.debug("Executing task %s ...", task);
@@ -120,7 +119,7 @@ public class CLI implements IShell {
 
 		ITaskInfo info = task.getInfo();
 		if (statement.hasOption("verbose", "v")) {
-			console.print(taskInfoFormatter, info);
+			console.print(TASK_INFO_FOMRATTER, info);
 			console.crlf();
 		}
 

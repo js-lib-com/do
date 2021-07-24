@@ -87,8 +87,8 @@ public class Statement {
 		return arguments.iterator();
 	}
 
-	public List<String> getCommand() {
-		return Collections.unmodifiableList(arguments.subList(0, parametersOffset));
+	public String getCommand() {
+		return Strings.join(arguments.subList(0, parametersOffset));
 	}
 
 	public void incrementParametersOffset() {
