@@ -1,8 +1,9 @@
 package com.jslib.dotasks;
 
+import java.io.Reader;
+import java.net.URI;
 import java.util.Map;
 
-import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITasksProvider;
 
 import js.log.Log;
@@ -23,14 +24,13 @@ public class TasksProvider implements ITasksProvider {
 	}
 
 	@Override
-	public Map<String, Class<? extends ITask>> getTasks() {
+	public Map<String, URI> getTasks() {
 		log.trace("getTasks()");
 		return Repository.TASKS;
 	}
 
 	@Override
-	public Map<String, String> getScripts() {
-		log.trace("getScripts()");
-		return Repository.SCRIPTS;
+	public Reader getScriptReader(URI taskURI) {
+		return null;
 	}
 }

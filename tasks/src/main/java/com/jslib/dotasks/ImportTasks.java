@@ -1,15 +1,16 @@
 package com.jslib.dotasks;
 
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.ServiceLoader;
 
 import com.jslib.docli.TasksRegistry;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IParameters;
-import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.ReturnCode;
+import com.jslib.dospi.util.FileUtils;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -17,15 +18,18 @@ import js.log.LogFactory;
 public class ImportTasks extends DoTask {
 	private static final Log log = LogFactory.getLog(ImportTasks.class);
 
+	private final FileUtils files;
+
 	public ImportTasks() {
 		log.trace("ImportTasks()");
+		this.files = new FileUtils();
 	}
 
 	@Override
 	public IParameters parameters() throws Exception {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
-		parameters.define(0, "context-name", Flags.OPTIONAL, String.class);
+		parameters.define(0, "provider-name", Flags.OPTIONAL, String.class);
 		return parameters;
 	}
 
@@ -35,12 +39,27 @@ public class ImportTasks extends DoTask {
 		TasksRegistry registry = new TasksRegistry();
 		registry.load();
 
+		Path homeDir = shell.getHomeDir();
+		Path scriptDir = homeDir.resolve("script");
+
+		String providerName = parameters.get("provider-name");
 		for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {
-			final Map<String, Class<? extends ITask>> tasks = provider.getTasks();
+			if(providerName != null && !provider.getName().equalsIgnoreCase(providerName)) {
+				continue;
+			}
+			
+			final Map<String, URI> tasks = provider.getTasks();
 			for (String commandPath : tasks.keySet()) {
-				final URI taskURI = URI.create("java:" + tasks.get(commandPath).getCanonicalName());
-				log.info("Import task %s.", taskURI);
+				final URI taskURI = tasks.get(commandPath);
+				log.info("Import task %s", taskURI);
 				registry.add(commandPath, taskURI);
+
+				if ("file".equals(taskURI.getScheme())) {
+					// script file URI path starts with path separator
+					Path scriptFile = scriptDir.resolve(taskURI.getPath().substring(1));
+					log.info("Copy file %s", scriptFile);
+					files.copy(provider.getScriptReader(taskURI), files.getWriter(scriptFile));
+				}
 			}
 		}
 		return ReturnCode.SUCCESS;

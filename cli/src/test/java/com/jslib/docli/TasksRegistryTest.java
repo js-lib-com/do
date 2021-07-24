@@ -12,13 +12,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -344,15 +344,15 @@ public class TasksRegistryTest {
 		}
 
 		@Override
-		public Map<String, Class<? extends ITask>> getTasks() {
-			Map<String, Class<? extends ITask>> tasks = new HashMap<>();
-			tasks.put("define task", DefineTask.class);
+		public Map<String, URI> getTasks() {
+			Map<String, URI> tasks = new HashMap<>();
+			tasks.put("define task", URI.create("java:/" + DefineTask.class.getCanonicalName()));
 			return tasks;
 		}
 
 		@Override
-		public Map<String, String> getScripts() {
-			return Collections.emptyMap();
+		public Reader getScriptReader(URI taskURI) {
+			return null;
 		}
 	}
 }

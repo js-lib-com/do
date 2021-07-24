@@ -49,7 +49,7 @@ public class TasksRegistry {
 			for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {
 				if ("built-in".equalsIgnoreCase(provider.getName())) {
 					for (String command : provider.getTasks().keySet()) {
-						add(command, URI.create("java:/" + provider.getTasks().get(command).getCanonicalName()));
+						add(command, provider.getTasks().get(command));
 					}
 				}
 			}

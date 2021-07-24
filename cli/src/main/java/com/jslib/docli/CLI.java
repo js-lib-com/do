@@ -2,6 +2,8 @@ package com.jslib.docli;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.jslib.docli.script.ScriptProcessor;
@@ -42,6 +44,11 @@ public class CLI implements IShell {
 		this.console = console;
 		this.processorFactory = new CliProcessorFactory(this);
 		this.registry = new TasksRegistry();
+	}
+
+	@Override
+	public Path getHomeDir() {
+		return Paths.get(Home.getPath());
 	}
 
 	public void load() throws IOException {

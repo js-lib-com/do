@@ -13,6 +13,7 @@ import java.io.Writer;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemException;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -43,7 +44,7 @@ public class FileUtils implements IFileUtils {
 	private final FileSystem fileSystem;
 
 	public FileUtils() {
-		this.fileSystem = null;
+		this.fileSystem = FileSystems.getDefault();
 	}
 
 	public FileUtils(FileSystem fileSystem) {
