@@ -26,8 +26,9 @@ public class ListStopWords extends DoTask {
 
 		IPrintout printout = shell.getPrintout();
 		printout.addHeading1("Stop Words");
+		printout.createOrderedList();
 		for (String word : stopWords) {
-			printout.addUnorderedItem(word);
+			printout.addOrderedItem(word);
 		}
 		printout.display();
 

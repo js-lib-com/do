@@ -1,7 +1,5 @@
 package com.jslib.dospi;
 
-import java.util.Map;
-
 public interface IPrintout {
 
 	void addHeading1(String heading);
@@ -12,13 +10,19 @@ public interface IPrintout {
 
 	void addHeading4(String heading);
 
+	void createUnorderedList();
+
 	void addUnorderedItem(String item);
+
+	void createOrderedList();
 
 	void addOrderedItem(String item);
 
-	void resetOrderedListIndex();
+	void createDefinitionsList();
 
-	void addDefinitionsList(Map<String, String> definitions);
+	void addDefinition(String term, String definition);
+
+	void createTable();
 
 	void addTableHeader(String columnName, String... columnNames);
 

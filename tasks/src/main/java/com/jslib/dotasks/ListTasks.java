@@ -36,6 +36,7 @@ public class ListTasks extends DoTask {
 		});
 
 		IPrintout printout = shell.getPrintout();
+		printout.createTable();
 		printout.addTableHeader("Command Path", "Task URI", "Task Description");
 
 		IProcessorFactory factory = shell.getProcessorFactory();

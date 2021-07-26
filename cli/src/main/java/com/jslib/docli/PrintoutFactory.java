@@ -1,7 +1,9 @@
 package com.jslib.docli;
 
-import com.jslib.dospi.IPrintoutFactory;
+import java.lang.reflect.Proxy;
+
 import com.jslib.dospi.IPrintout;
+import com.jslib.dospi.IPrintoutFactory;
 
 public class PrintoutFactory implements IPrintoutFactory {
 	private final Console console;
@@ -12,6 +14,6 @@ public class PrintoutFactory implements IPrintoutFactory {
 
 	@Override
 	public IPrintout createPrintout() {
-		return new Printout(console);
+		return  (IPrintout) Proxy.newProxyInstance(IPrintout.class.getClassLoader(), new Class[] { IPrintout.class }, new Printout(console));
 	}
 }
