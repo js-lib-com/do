@@ -53,6 +53,8 @@ public interface IParameters {
 
 	// --------------------------------------------------------------------------------------------
 
+	boolean has(String name);
+	
 	String get(String name);
 
 	<T> T get(String name, Class<T> type);

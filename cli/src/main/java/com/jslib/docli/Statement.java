@@ -99,6 +99,10 @@ public class Statement {
 		this.parametersOffset = parametersOffset;
 	}
 
+	public boolean hasParameters() {
+		return parametersOffset < arguments.size();
+	}
+
 	/**
 	 * Get statement parameter identified by its position on command line. Return null if parameters not found.
 	 * <p>

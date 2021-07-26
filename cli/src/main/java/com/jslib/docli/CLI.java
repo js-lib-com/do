@@ -28,6 +28,8 @@ import js.converter.ConverterException;
 import js.converter.ConverterRegistry;
 import js.log.Log;
 import js.log.LogFactory;
+import js.util.Strings;
+import js.util.Types;
 
 public class CLI implements IShell {
 	private static final Log log = LogFactory.getLog(CLI.class);
@@ -139,19 +141,27 @@ public class CLI implements IShell {
 	}
 
 	private IParameters getParameters(Statement statement, ITask task) throws Exception {
+		log.trace("getParameters(statement, task)");
+
 		IParameters parameters = task.parameters();
 		for (IParameterDefinition<?> definition : parameters.definitions()) {
 			Object value = null;
 			while (value == null) {
 				String input = null;
+				boolean positional = false;
 				if (definition.isPositional()) {
 					input = statement.getParameter(definition.position());
+					positional = input != null;
 				}
 				if (input == null) {
-					if (definition.hasDefaultValue()) {
-						input = console.input(definition.label(), definition.defaultValue().toString());
+					if (statement.hasParameters() && definition.isPositional() && definition.isOptional()) {
+						input = "";
 					} else {
-						input = console.input(definition.label());
+						if (definition.hasDefaultValue()) {
+							input = console.input(definition.label(), definition.defaultValue().toString());
+						} else {
+							input = console.input(definition.label());
+						}
 					}
 				}
 				input = input.trim();
@@ -168,7 +178,14 @@ public class CLI implements IShell {
 				try {
 					value = converter.asObject(input, definition.type());
 				} catch (ConverterException e) {
-					log.warn(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+					if (Types.isEnum(definition.type())) {
+						log.warn("Invalid value. Should be one of: %s", Strings.join(definition.type().getEnumConstants(), ", "));
+						if (positional) {
+							break;
+						}
+					} else {
+						log.warn(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+					}
 					continue;
 				}
 				parameters.add(definition.name(), value);

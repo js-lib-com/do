@@ -111,6 +111,11 @@ public class Parameters implements IParameters {
 	}
 
 	@Override
+	public boolean has(String name) {
+		return parameters.containsKey(name);
+	}
+
+	@Override
 	public String get(String name) {
 		Parameter<?> parameter = parameters.get(name);
 		if (parameter == null) {
@@ -127,7 +132,7 @@ public class Parameters implements IParameters {
 			throw new IllegalStateException(format("Parameter %s is not defined.", name));
 		}
 		T value = parameter.value();
-		if (!type.isInstance(value)) {
+		if (value != null && !type.isInstance(value)) {
 			throw new IllegalStateException(format("Parameter %s is not of type %s.", name, type));
 		}
 		return value;
