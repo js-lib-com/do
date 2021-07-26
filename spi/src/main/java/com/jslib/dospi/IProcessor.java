@@ -1,11 +1,9 @@
 package com.jslib.dospi;
 
-import java.net.URI;
-
 public interface IProcessor {
-	
-	ITask getTask(URI taskURI);
-	
+
+	ITask getTask(TaskReference reference);
+
 	ReturnCode execute(ITask task, IParameters parameters) throws Exception;
-	
+
 }

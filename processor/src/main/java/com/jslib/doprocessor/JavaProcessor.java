@@ -1,10 +1,9 @@
 package com.jslib.doprocessor;
 
-import java.net.URI;
-
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.ITask;
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -19,10 +18,10 @@ class JavaProcessor implements IProcessor {
 	}
 
 	@Override
-	public ITask getTask(URI taskURI) {
-		log.trace("getTask(taskURI)");
+	public ITask getTask(TaskReference reference) {
+		log.trace("getTask(reference)");
 		// taskURI path starts with separator, e.g. java:/com.jslib.dotasks.DefineTask
-		return Classes.newInstance(taskURI.getPath().substring(1));
+		return Classes.newInstance(reference.getPath().substring(1));
 	}
 
 	@Override

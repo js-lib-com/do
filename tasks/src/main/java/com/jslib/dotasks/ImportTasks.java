@@ -1,6 +1,5 @@
 package com.jslib.dotasks;
 
-import java.net.URI;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -10,6 +9,7 @@ import com.jslib.dospi.Flags;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.ReturnCode;
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.util.FileUtils;
 
 import js.log.Log;
@@ -48,19 +48,19 @@ public class ImportTasks extends DoTask {
 				continue;
 			}
 
-			final Map<String, URI> tasks = provider.getTasks();
+			final Map<String, TaskReference> tasks = provider.getTasks();
 			for (String commandPath : tasks.keySet()) {
-				final URI taskURI = tasks.get(commandPath);
-				if (!registry.add(commandPath, taskURI)) {
+				final TaskReference taskReference = tasks.get(commandPath);
+				if (!registry.add(commandPath, taskReference)) {
 					continue;
 				}
 
-				log.info("Import task %s", taskURI);
-				if ("file".equals(taskURI.getScheme())) {
+				log.info("Import task %s", taskReference);
+				if ("file".equals(taskReference.getScheme())) {
 					// script file URI path starts with path separator
-					Path scriptFile = scriptDir.resolve(taskURI.getPath().substring(1));
+					Path scriptFile = scriptDir.resolve(taskReference.getPath().substring(1));
 					log.info("Copy file %s", scriptFile);
-					files.copy(provider.getScriptReader(taskURI), files.getWriter(scriptFile));
+					files.copy(provider.getScriptReader(taskReference), files.getWriter(scriptFile));
 				}
 			}
 		}

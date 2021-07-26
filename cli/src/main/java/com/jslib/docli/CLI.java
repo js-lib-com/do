@@ -1,10 +1,9 @@
 package com.jslib.docli;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.SortedSet;
 
 import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.doprocessor.ProcessorFactory;
@@ -20,6 +19,7 @@ import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskAbortException;
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.UserCancelException;
 
 import js.converter.Converter;
@@ -84,26 +84,26 @@ public class CLI implements IShell {
 		// search for tasks mapped to command defined by given statement
 		// increment statement parameters offset for every command word
 		// statement parameters offset is used below, when set values for parameters list
-		Collection<URI> taskURIs = registry.search(statement.iterator(), word -> {
+		SortedSet<TaskReference> references = registry.search(statement.iterator(), word -> {
 			statement.incrementParametersOffset();
 		});
-		log.debug("tasks=%s", taskURIs);
-		if (taskURIs == null) {
+		log.debug("tasks=%s", references);
+		if (references == null) {
 			log.warn("Statement '%s' not defined. See 'define task'.", statement);
 			return ReturnCode.NO_COMMAND;
 		}
 
 		IProcessor processor = null;
 		ITask task = null;
-		for (URI taskURI : taskURIs) {
-			processor = processorFactory.getProcessor(taskURI);
-			task = processor.getTask(taskURI);
-			if(task.isExecutionContext()) {
+		for (TaskReference reference : references) {
+			processor = processorFactory.getProcessor(reference);
+			task = processor.getTask(reference);
+			if (task.isExecutionContext()) {
 				break;
 			}
 			task = null;
 		}
-		if(task == null) {
+		if (task == null) {
 			log.warn("Not proper execution context for statement '%s'.", statement.getCommand());
 			return ReturnCode.ABORT;
 		}
@@ -208,11 +208,11 @@ public class CLI implements IShell {
 		}
 
 		@Override
-		public IProcessor getProcessor(URI taskURI) {
-			if ("file".equals(taskURI.getScheme()) && taskURI.getPath() != null && taskURI.getPath().endsWith(".do")) {
+		public IProcessor getProcessor(TaskReference reference) {
+			if ("file".equals(reference.getScheme()) && reference.getPath() != null && reference.getPath().endsWith(".do")) {
 				return scriptProcessor;
 			}
-			return super.getProcessor(taskURI);
+			return super.getProcessor(reference);
 		}
 	}
 }

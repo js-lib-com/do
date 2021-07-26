@@ -1,6 +1,5 @@
 package com.jslib.docli.script;
 
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -9,6 +8,7 @@ import com.jslib.docli.Home;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.ITask;
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -25,11 +25,11 @@ public class ScriptProcessor implements IProcessor {
 	}
 
 	@Override
-	public ITask getTask(URI taskURI) {
-		log.trace("getTask(taskURI)");
+	public ITask getTask(TaskReference reference) {
+		log.trace("getTask(reference)");
 		Path homeDir = Paths.get(Home.getPath());
 		// task URI path starts with path separator
-		Path scriptFile = homeDir.resolve("script" + taskURI.getPath());
+		Path scriptFile = homeDir.resolve("script" + reference.getPath());
 		return new ScriptInterpreter(cli, scriptFile);
 	}
 

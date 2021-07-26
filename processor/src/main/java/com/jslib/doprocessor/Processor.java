@@ -1,6 +1,5 @@
 package com.jslib.doprocessor;
 
-import java.net.URI;
 import java.time.LocalDate;
 
 import com.jslib.dospi.IParameters;
@@ -8,11 +7,12 @@ import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
 
 public abstract class Processor implements IProcessor {
 	@Override
-	public ITask getTask(URI taskURI) {
+	public ITask getTask(TaskReference reference) {
 		return new TaskProxy();
 	}
 

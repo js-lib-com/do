@@ -1,6 +1,5 @@
 package com.jslib.dotasks;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -11,6 +10,7 @@ import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
 import com.jslib.dospi.ITask;
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -30,20 +30,20 @@ public class ListTasks extends DoTask {
 		TasksRegistry registry = new TasksRegistry();
 		registry.load();
 
-		Map<String, SortedSet<URI>> tasks = new TreeMap<>();
+		Map<String, SortedSet<TaskReference>> references = new TreeMap<>();
 		registry.list(command -> {
-			tasks.put(command.path, command.tasks);
+			references.put(command.path, command.tasks);
 		});
 
 		IPrintout printout = shell.getPrintout();
 		printout.addTableHeader("Command Path", "Task URI", "Task Description");
 
 		IProcessorFactory factory = shell.getProcessorFactory();
-		for (String commandPath : tasks.keySet()) {
-			for (URI taskURI : tasks.get(commandPath)) {
-				IProcessor processor = factory.getProcessor(taskURI);
-				ITask task = processor.getTask(taskURI);
-				printout.addTableRow(commandPath, taskURI.toASCIIString(), task.getInfo().getDescription());
+		for (String commandPath : references.keySet()) {
+			for (TaskReference reference : references.get(commandPath)) {
+				IProcessor processor = factory.getProcessor(reference);
+				ITask task = processor.getTask(reference);
+				printout.addTableRow(commandPath, reference.toString(), task.getInfo().getDescription());
 			}
 		}
 		printout.display();

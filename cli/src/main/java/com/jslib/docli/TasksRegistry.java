@@ -3,12 +3,10 @@ package com.jslib.docli;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -18,6 +16,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ITasksProvider;
 
 import js.json.Json;
@@ -68,13 +67,13 @@ public class TasksRegistry {
 		}
 	}
 
-	public boolean add(String command, URI taskURI) throws IOException {
-		return add(Arrays.asList(command.split(" ")).iterator(), taskURI);
+	public boolean add(String command, TaskReference reference) throws IOException {
+		return add(Arrays.asList(command.split(" ")).iterator(), reference);
 	}
 
-	public boolean add(Iterator<String> command, URI taskURI) throws IOException {
-		log.trace("add(command, taskURI)");
-		Params.notNull(taskURI, "Task URI");
+	public boolean add(Iterator<String> command, TaskReference reference) throws IOException {
+		log.trace("add(command, reference)");
+		Params.notNull(reference, "Task reference");
 
 		Node node = add(root, command);
 		if (node.children != null) {
@@ -84,7 +83,7 @@ public class TasksRegistry {
 			node.tasks = new TreeSet<>();
 		}
 
-		boolean updated = node.tasks.add(taskURI);
+		boolean updated = node.tasks.add(reference);
 		save();
 		return updated;
 	}
@@ -147,7 +146,7 @@ public class TasksRegistry {
 		}
 	}
 
-	public Collection<URI> search(Iterator<String> words, WordFoundListener listener) {
+	public SortedSet<TaskReference> search(Iterator<String> words, WordFoundListener listener) {
 		log.trace("search(words, listener)");
 		Node node = search(root, words, listener);
 		return node != null ? node.tasks : null;
@@ -198,7 +197,7 @@ public class TasksRegistry {
 		// Node parent;
 
 		SortedMap<String, Node> children;
-		SortedSet<URI> tasks;
+		SortedSet<TaskReference> tasks;
 
 		boolean isEmpty() {
 			return (children == null || children.isEmpty()) && (tasks == null || tasks.isEmpty());
@@ -216,9 +215,9 @@ public class TasksRegistry {
 
 	public static class Command {
 		public final String path;
-		public final SortedSet<URI> tasks;
+		public final SortedSet<TaskReference> tasks;
 
-		public Command(String path, SortedSet<URI> tasks) {
+		public Command(String path, SortedSet<TaskReference> tasks) {
 			this.path = path;
 			this.tasks = tasks;
 		}

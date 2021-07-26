@@ -1,9 +1,8 @@
 package com.jslib.doprocessor;
 
-import java.net.URI;
-
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
+import com.jslib.dospi.TaskReference;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -17,12 +16,12 @@ public class ProcessorFactory implements IProcessorFactory {
 	}
 
 	@Override
-	public IProcessor getProcessor(URI taskURI) {
-		log.trace("getProcessor(taskURI)");
-		Params.notNull(taskURI, "Task URI");
-		Params.notNull(taskURI.getScheme(), "Task URI scheme");
+	public IProcessor getProcessor(TaskReference reference) {
+		log.trace("getProcessor(reference)");
+		Params.notNull(reference, "Task reference");
+		Params.notNull(reference.getScheme(), "Task URI scheme");
 
-		switch (taskURI.getScheme()) {
+		switch (reference.getScheme()) {
 		case "java":
 			return new JavaProcessor();
 
@@ -46,7 +45,7 @@ public class ProcessorFactory implements IProcessorFactory {
 			return new JavaScriptProcessor();
 
 		default:
-			throw new IllegalStateException("Missing processor for scheme " + taskURI.getScheme());
+			throw new IllegalStateException("Missing processor for scheme " + reference.getScheme());
 		}
 	}
 }
