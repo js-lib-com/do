@@ -111,6 +111,7 @@ public class MarkdownConsole {
 				builder.append(c);
 			}
 		}
+		builder.append("\u001B[0m");
 		return builder.toString();
 	}
 

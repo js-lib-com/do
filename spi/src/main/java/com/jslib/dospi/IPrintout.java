@@ -8,15 +8,13 @@ public interface IPrintout {
 
 	void addHeading3(String heading);
 
-	void addHeading4(String heading);
-
+	void addParagraph(String paragraph);
+	
 	void createUnorderedList();
-
-	void addUnorderedItem(String item);
 
 	void createOrderedList();
 
-	void addOrderedItem(String item);
+	void addListItem(String item);
 
 	void createDefinitionsList();
 

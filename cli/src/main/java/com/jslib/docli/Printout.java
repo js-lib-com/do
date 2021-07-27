@@ -42,59 +42,50 @@ public class Printout implements IPrintout, InvocationHandler {
 	}
 
 	@Override
-	public void addHeading4(String heading) {
+	public void addParagraph(String paragraph) {
+		builder.append(paragraph);
 		builder.append("\r\n");
-		builder.append(format("#### %s\r\n", heading));
 	}
 
 	// --------------------------------------------------------------------------------------------
 
-	private final List<String> unorderedList = new ArrayList<>();
+	private final List<String> list = new ArrayList<>();
 
 	@Override
 	public void createUnorderedList() {
-		orderedList.clear();
-		autodisplayMethodName = "addUnorderedItem";
-		autodisplayMonitors = Arrays.asList("displayUnorderedList");
+		list.clear();
+		autodisplayMethodName = "displayUnorderedList";
+		autodisplayMonitors = Arrays.asList("addListItem");
 	}
 
 	@Override
-	public void addUnorderedItem(String item) {
-		unorderedList.add(item);
+	public void createOrderedList() {
+		list.clear();
+		autodisplayMethodName = "displayOrderedList";
+		autodisplayMonitors = Arrays.asList("addListItem");
+	}
+
+	@Override
+	public void addListItem(String item) {
+		list.add(item);
 	}
 
 	public void displayUnorderedList() {
-		if (unorderedList.isEmpty()) {
+		if (list.isEmpty()) {
 			return;
 		}
-		unorderedList.forEach(item -> {
+		list.forEach(item -> {
 			builder.append(format("- %s\r\n", item));
 		});
 		builder.append("\r\n");
 	}
 
-	// --------------------------------------------------------------------------------------------
-
-	private final List<String> orderedList = new ArrayList<>();
-
-	@Override
-	public void createOrderedList() {
-		orderedList.clear();
-		autodisplayMethodName = "displayOrderedList";
-		autodisplayMonitors = Arrays.asList("addOrderedItem");
-	}
-
-	@Override
-	public void addOrderedItem(String item) {
-		orderedList.add(item);
-	}
-
 	public void displayOrderedList() {
-		if (orderedList.isEmpty()) {
+		if (list.isEmpty()) {
 			return;
 		}
-		for (int i = 0; i < orderedList.size(); ++i) {
-			builder.append(format("%d. %s\r\n", i + 1, orderedList.get(i)));
+		for (int i = 0; i < list.size(); ++i) {
+			builder.append(format("%d. %s\r\n", i + 1, list.get(i)));
 		}
 		builder.append("\r\n");
 	}
