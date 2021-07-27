@@ -36,7 +36,7 @@ public class TasksProvider implements ITasksProvider {
 	}
 
 	@Override
-	public Map<String, TaskReference> getTasks() {
+	public Map<String, TaskReference> getTaskReferences() {
 		log.trace("getTasks()");
 		return TASKS;
 	}

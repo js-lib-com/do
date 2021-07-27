@@ -9,14 +9,14 @@ public interface ITasksProvider {
 	String getName();
 
 	/**
-	 * Return provider task URI mapped by recommended command path.
+	 * Return provider task references mapped by recommended command path.
 	 * 
-	 * @return
+	 * @return task references.
 	 */
-	Map<String, TaskReference> getTasks();
+	Map<String, TaskReference> getTaskReferences();
 
 	/**
-	 * Optional script reader used only if {@link #getTasks()} returns URIs for script files. Returns null if scripts are not
+	 * Optional script reader used only if {@link #getTaskReferences()} returns URIs for script files. Returns null if scripts are not
 	 * provided.
 	 * 
 	 * @param reference

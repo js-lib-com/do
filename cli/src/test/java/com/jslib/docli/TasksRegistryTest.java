@@ -336,7 +336,7 @@ public class TasksRegistryTest {
 		}
 
 		@Override
-		public IParameters parameters() throws Exception {
+		public IParameters parameters() {
 			return null;
 		}
 
@@ -351,7 +351,7 @@ public class TasksRegistryTest {
 		}
 
 		@Override
-		public String help() throws Exception {
+		public String help() throws IOException {
 			return null;
 		}
 	}
@@ -363,7 +363,7 @@ public class TasksRegistryTest {
 		}
 
 		@Override
-		public Map<String, TaskReference> getTasks() {
+		public Map<String, TaskReference> getTaskReferences() {
 			Map<String, TaskReference> tasks = new HashMap<>();
 			tasks.put("define task", new TaskReference(DefineTask.class, false));
 			return tasks;

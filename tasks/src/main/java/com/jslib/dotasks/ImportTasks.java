@@ -26,7 +26,7 @@ public class ImportTasks extends DoTask {
 	}
 
 	@Override
-	public IParameters parameters() throws Exception {
+	public IParameters parameters() {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
 		parameters.define(0, "provider-name", Flags.OPTIONAL, String.class);
@@ -48,7 +48,7 @@ public class ImportTasks extends DoTask {
 				continue;
 			}
 
-			final Map<String, TaskReference> tasks = provider.getTasks();
+			final Map<String, TaskReference> tasks = provider.getTaskReferences();
 			for (String commandPath : tasks.keySet()) {
 				final TaskReference taskReference = tasks.get(commandPath);
 				if (!registry.add(commandPath, taskReference)) {
@@ -74,6 +74,6 @@ public class ImportTasks extends DoTask {
 
 	@Override
 	public String getDescription() {
-		return "(Re)Import all tasks deployed on libraries directory.";
+		return "Import all tasks deployed on libraries directory.";
 	}
 }

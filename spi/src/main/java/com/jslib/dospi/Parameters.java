@@ -62,30 +62,6 @@ public class Parameters implements IParameters {
 		parameters.put(name, new Parameter<T>(NO_PARAMETER_POSITION, name, label(name), Flags.NONE, type, optional(defaultValue)));
 	}
 
-	@Override
-	public <T> void define(int position, String name, String label, IParameterCallback<T> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public <T> void define(int position, String name, IParameterCallback<T> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public <T> void define(String name, String label, IParameterCallback<T> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public <T> void define(String name, IParameterCallback<T> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
 	private static String label(String name) {
 		return Strings.toTitleCase(name);
 	}
@@ -141,12 +117,12 @@ public class Parameters implements IParameters {
 	private List<String> arguments;
 
 	@Override
-	public void arguments(List<String> arguments) {
+	public void setArguments(List<String> arguments) {
 		this.arguments = arguments;
 	}
 
 	@Override
-	public List<String> arguments() {
+	public List<String> getArguments() {
 		return arguments;
 	}
 }

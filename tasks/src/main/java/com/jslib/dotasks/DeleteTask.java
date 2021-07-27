@@ -13,14 +13,10 @@ public class DeleteTask extends DoTask {
 
 	public DeleteTask() {
 		log.trace("DeleteTask()");
-
-		// IParameters parameters = shell.getParameters();
-		// parameters.define("command-path", String.class);
-		// parameters.define("context-name", Flags.OPTIONAL, String.class);
 	}
 
 	@Override
-	public IParameters parameters() throws Exception {
+	public IParameters parameters() {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
 		parameters.define("command-path", String.class);
@@ -30,14 +26,6 @@ public class DeleteTask extends DoTask {
 	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
-
-		// IForm form = shell.getForm();
-		// form.addField("command-path", String.class);
-		// form.addField("context-name", Flags.OPTIONAL, String.class);
-		//
-		// IFormData data = form.submit();
-		// final String commandPath = data.get("command-path");
-		// final String contextName = data.get("context-name");
 
 		String commandPath = parameters.get("command-path");
 

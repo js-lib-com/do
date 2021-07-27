@@ -3,6 +3,7 @@ package com.jslib.dospi;
 import java.time.LocalDate;
 
 public interface ITaskInfo {
+
 	String getDisplay();
 
 	String getDescription();
@@ -12,4 +13,5 @@ public interface ITaskInfo {
 	LocalDate getLastUpdate();
 
 	String getAuthor();
+
 }

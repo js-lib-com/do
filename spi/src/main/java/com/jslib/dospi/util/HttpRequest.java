@@ -28,7 +28,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.xml.sax.SAXException;
 
 import com.jslib.dospi.IHttpFile;
-import com.jslib.dospi.IHttpRequest;
 import com.jslib.dospi.IProgress;
 
 import js.dom.Document;
@@ -36,21 +35,18 @@ import js.dom.DocumentBuilder;
 import js.dom.Element;
 import js.util.Classes;
 
-public class HttpRequest implements IHttpRequest {
+public class HttpRequest {
 	private final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 	private final DocumentBuilder documentBuilder = Classes.loadService(DocumentBuilder.class);
 
-	@Override
 	public Document loadHTML(URI remoteFile) throws MalformedURLException, IOException, SAXException {
 		return documentBuilder.loadHTML(remoteFile.toURL());
 	}
 
-	@Override
 	public Path download(URI remoteFile, Path localFile) throws IOException {
 		return download(remoteFile, localFile, null);
 	}
 
-	@Override
 	public Path download(URI remoteFile, Path localFile, IProgress<Integer> progress) throws IOException {
 		try (CloseableHttpClient client = httpClientBuilder.build()) {
 			HttpGet httpGet = new HttpGet(remoteFile);
@@ -77,7 +73,6 @@ public class HttpRequest implements IHttpRequest {
 
 	private static final DateTimeFormatter modificationTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-	@Override
 	public Iterable<IHttpFile> getApacheDirectoryIndex(URI remoteDir, Pattern fileNamePattern) throws IOException, URISyntaxException, SAXException, XPathExpressionException {
 		Document indexPageDoc = loadHTML(remoteDir);
 
@@ -100,12 +95,10 @@ public class HttpRequest implements IHttpRequest {
 		return files;
 	}
 
-	@Override
 	public IHttpFile scanLatestFileVersion(URI remoteDir, Pattern filePattern) throws IOException, URISyntaxException, XPathExpressionException, SAXException {
 		return scanLatestFileVersion(remoteDir, filePattern, null);
 	}
 
-	@Override
 	public IHttpFile scanLatestFileVersion(URI remoteDir, Pattern filePattern, IProgress<IHttpFile> progress) throws IOException, URISyntaxException, XPathExpressionException, SAXException {
 		IHttpFile mostRecentFile = null;
 		for (IHttpFile file : getApacheDirectoryIndex(remoteDir, filePattern)) {
@@ -163,27 +156,22 @@ public class HttpRequest implements IHttpRequest {
 			this.size = size;
 		}
 
-		@Override
 		public URI getURI() {
 			return uri;
 		}
 
-		@Override
 		public String getName() {
 			return name;
 		}
 
-		@Override
 		public LocalDateTime getModificationTime() {
 			return modificationTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 		}
 
-		@Override
 		public long getSize() {
 			return size;
 		}
 
-		@Override
 		public boolean isAfter(IHttpFile other) {
 			return this.modificationTime.isAfter(((File) other).modificationTime);
 		}

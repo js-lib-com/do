@@ -83,7 +83,7 @@ class ScriptInterpreter implements ITask {
 	}
 
 	@Override
-	public IParameters parameters() throws Exception {
+	public IParameters parameters() {
 		return new Parameters();
 	}
 
@@ -93,7 +93,7 @@ class ScriptInterpreter implements ITask {
 	}
 
 	@Override
-	public String help() throws Exception {
+	public String help() throws IOException {
 		return "Script help.";
 	}
 }

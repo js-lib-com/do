@@ -19,7 +19,7 @@ public class DefineTask extends DoTask {
 	}
 
 	@Override
-	public IParameters parameters() throws Exception {
+	public IParameters parameters() {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
 		parameters.define("command-path", String.class);

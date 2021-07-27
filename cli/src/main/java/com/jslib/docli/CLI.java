@@ -1,6 +1,7 @@
 package com.jslib.docli;
 
 import java.io.IOException;
+import java.lang.reflect.Proxy;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.SortedSet;
@@ -8,11 +9,9 @@ import java.util.SortedSet;
 import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.IConsole;
-import com.jslib.dospi.IForm;
 import com.jslib.dospi.IParameterDefinition;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
-import com.jslib.dospi.IPrintoutFactory;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
 import com.jslib.dospi.IShell;
@@ -38,7 +37,6 @@ public class CLI implements IShell {
 
 	private final Converter converter;
 	private final Console console;
-	private final IPrintoutFactory printoutFactory;
 	private final IProcessorFactory processorFactory;
 	private final TasksRegistry registry;
 
@@ -46,7 +44,6 @@ public class CLI implements IShell {
 		log.trace("CLI(console)");
 		this.converter = ConverterRegistry.getConverter();
 		this.console = console;
-		this.printoutFactory = new PrintoutFactory(this.console);
 		this.processorFactory = new CliProcessorFactory(this);
 		this.registry = new TasksRegistry();
 	}
@@ -71,13 +68,8 @@ public class CLI implements IShell {
 	}
 
 	@Override
-	public IForm getForm() {
-		return new Form(console);
-	}
-
-	@Override
 	public IPrintout getPrintout() {
-		return printoutFactory.createPrintout();
+		return (IPrintout) Proxy.newProxyInstance(IPrintout.class.getClassLoader(), new Class[] { IPrintout.class }, new Printout(console));
 	}
 
 	public ReturnCode execute(Statement statement) throws Exception {
@@ -191,7 +183,7 @@ public class CLI implements IShell {
 				parameters.add(definition.name(), value);
 			}
 		}
-		parameters.arguments(statement.getParameters());
+		parameters.setArguments(statement.getParameters());
 		return parameters;
 	}
 

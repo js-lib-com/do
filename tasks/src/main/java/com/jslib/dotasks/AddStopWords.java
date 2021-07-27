@@ -23,7 +23,7 @@ public class AddStopWords extends DoTask {
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
 
-		for (String word : parameters.arguments()) {
+		for (String word : parameters.getArguments()) {
 			stopWords.add(word);
 		}
 

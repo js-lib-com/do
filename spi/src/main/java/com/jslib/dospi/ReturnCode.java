@@ -1,7 +1,7 @@
 package com.jslib.dospi;
 
 public enum ReturnCode {
-	SUCCESS, CANCEL, NO_COMMAND, BAD_PARAMETER, ABORT, TASK_FAIL, SYSTEM_FAIL, BUG;
+	SUCCESS, NO_COMMAND, CANCEL, ABORT, TASK_FAIL, SYSTEM_FAIL;
 
 	public boolean isSuccess() {
 		return this == ReturnCode.SUCCESS;

@@ -1,5 +1,6 @@
 package com.jslib.doprocessor;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 import com.jslib.dospi.IParameters;
@@ -7,8 +8,8 @@ import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
-import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
+import com.jslib.dospi.TaskReference;
 
 public abstract class Processor implements IProcessor {
 	@Override
@@ -16,12 +17,14 @@ public abstract class Processor implements IProcessor {
 		return new TaskProxy();
 	}
 
+	/**
+	 * Task proxy delegates task implementation to different programming languages or to remote method invocation.
+	 * 
+	 * @author Iulian Rotaru
+	 */
 	private static class TaskProxy implements ITask {
-		protected IShell shell;
-
 		@Override
 		public void setShell(IShell shell) {
-			this.shell = shell;
 		}
 
 		@Override
@@ -30,14 +33,12 @@ public abstract class Processor implements IProcessor {
 		}
 
 		@Override
-		public IParameters parameters() throws Exception {
-			// TODO Auto-generated method stub
+		public IParameters parameters() {
 			return null;
 		}
 
 		@Override
 		public ReturnCode execute(IParameters parameters) throws Exception {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -47,42 +48,35 @@ public abstract class Processor implements IProcessor {
 		}
 
 		@Override
-		public String help() throws Exception {
-			// TODO Auto-generated method stub
+		public String help() throws IOException {
 			return null;
 		}
 	}
 
 	private static class TaskInfo implements ITaskInfo {
-
 		@Override
 		public String getDisplay() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public String getDescription() {
-			return "TODO: add task description.";
+			return null;
 		}
 
 		@Override
 		public String getVersion() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public LocalDate getLastUpdate() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public String getAuthor() {
-			// TODO Auto-generated method stub
 			return null;
 		}
-
 	}
 }

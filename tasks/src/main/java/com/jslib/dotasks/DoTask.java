@@ -1,5 +1,6 @@
 package com.jslib.dotasks;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 import com.jslib.dospi.IParameters;
@@ -20,7 +21,7 @@ abstract class DoTask implements ITask, ITaskInfo {
 	}
 
 	@Override
-	public IParameters parameters() throws Exception {
+	public IParameters parameters() {
 		return parameters;
 	}
 
@@ -35,7 +36,7 @@ abstract class DoTask implements ITask, ITaskInfo {
 	}
 
 	@Override
-	public String help() throws Exception {
+	public String help() throws IOException {
 		return String.format("# %s help not implemented", getClass().getCanonicalName());
 	}
 

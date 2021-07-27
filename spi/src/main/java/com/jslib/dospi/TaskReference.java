@@ -4,12 +4,20 @@ import java.net.URI;
 
 /**
  * Immutable value class for task references. This class is a URI constrained to specifics of task referencing: it has only
- * scheme and path.
+ * scheme and path. Of course path syntax depends on scheme.
+ * <p>
+ * Task reference also has a flag signaling that the task is contextual - see {@link #contextual}. It is used on comparison
+ * implementation so that contextual tasks have higher priority. Remember that contextual task need to be executed in a specific
+ * environment tested by {@link ITask#isExecutionContext()}. By contrast a non contextual task is global.
  * 
  * @author Iulian Rotaru
  */
 public final class TaskReference implements Comparable<TaskReference> {
 	private URI uri;
+	/**
+	 * Contextual task should be executed in specific environment and has high priority. By contrast non contextual tasks can be
+	 * executed everywhere. This field is used by {@link #compareTo(TaskReference)} for comparison implementation.
+	 */
 	private boolean contextual;
 
 	public TaskReference() {
