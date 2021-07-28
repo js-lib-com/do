@@ -15,7 +15,6 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +44,7 @@ import com.jslib.dospi.TaskReference;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TasksRegistryTest {
-	private static final String JSON = "{\"root\":{\"children\":{\"a\":{\"children\":{\"b\":{\"children\": null,\"tasks\":[{\"uri\":\"java:/Task\",\"contextual\":false}]}},\"tasks\": null}},\"tasks\": null}}";
+	private static final String JSON = "{\"root\":{\"children\":{\"a\":{\"children\":{\"b\":{\"children\": null,\"tasks\":[{\"uri\":\"java:Task\",\"contextual\":false}]}},\"tasks\": null}},\"tasks\": null}}";
 
 	@Mock
 	private TasksRegistry.WordFoundListener listener;
@@ -66,7 +65,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		registry.add(words, reference("java:/Task"));
+		registry.add(words, reference("java:Task"));
 
 		// then
 		words = Arrays.asList("a", "b").iterator();
@@ -74,7 +73,7 @@ public class TasksRegistryTest {
 
 		assertThat(tasks, notNullValue());
 		assertThat(tasks, hasSize(1));
-		assertThat(tasks, hasItem(reference("java:/Task")));
+		assertThat(tasks, hasItem(reference("java:Task")));
 	}
 
 	@Ignore
@@ -84,7 +83,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b").iterator();
 
 		// when
-		registry.add(words, reference("java:/ReplaceTask"));
+		registry.add(words, reference("java:ReplaceTask"));
 
 		// then
 		words = Arrays.asList("a", "b").iterator();
@@ -92,8 +91,8 @@ public class TasksRegistryTest {
 
 		assertThat(tasks, notNullValue());
 		assertThat(tasks, hasSize(2));
-		assertThat(tasks, hasItem(reference("java:/Task")));
-		assertThat(tasks, hasItem(reference("java:/ReplaceTask")));
+		assertThat(tasks, hasItem(reference("java:Task")));
+		assertThat(tasks, hasItem(reference("java:ReplaceTask")));
 	}
 
 	@Test
@@ -102,7 +101,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "c").iterator();
 
 		// when
-		registry.add(words, reference("java:/AlternativeTask"));
+		registry.add(words, reference("java:AlternativeTask"));
 
 		// then
 		words = Arrays.asList("a", "c").iterator();
@@ -110,7 +109,7 @@ public class TasksRegistryTest {
 
 		assertThat(tasks, notNullValue());
 		assertThat(tasks, hasSize(1));
-		assertThat(tasks, hasItem(reference("java:/AlternativeTask")));
+		assertThat(tasks, hasItem(reference("java:AlternativeTask")));
 	}
 
 	@Test
@@ -119,7 +118,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "c", "d").iterator();
 
 		// when
-		registry.add(words, reference("java:/AlternativeTask"));
+		registry.add(words, reference("java:AlternativeTask"));
 
 		// then
 		words = Arrays.asList("a", "c", "d").iterator();
@@ -127,7 +126,7 @@ public class TasksRegistryTest {
 
 		assertThat(tasks, notNullValue());
 		assertThat(tasks, hasSize(1));
-		assertThat(tasks, hasItem(reference("java:/AlternativeTask")));
+		assertThat(tasks, hasItem(reference("java:AlternativeTask")));
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -136,7 +135,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a").iterator();
 
 		// when
-		registry.add(words, reference("java:/Task"));
+		registry.add(words, reference("java:Task"));
 
 		// then
 	}
@@ -147,7 +146,7 @@ public class TasksRegistryTest {
 		Iterator<String> words = Arrays.asList("a", "b", "c").iterator();
 
 		// when
-		registry.add(words, reference("java:/Task"));
+		registry.add(words, reference("java:Task"));
 
 		// then
 	}
@@ -163,7 +162,7 @@ public class TasksRegistryTest {
 		// then
 		assertThat(tasks, notNullValue());
 		assertThat(tasks, hasSize(1));
-		assertThat(tasks, hasItem(reference("java:/Task")));
+		assertThat(tasks, hasItem(reference("java:Task")));
 	}
 
 	@Test
@@ -189,7 +188,7 @@ public class TasksRegistryTest {
 		// then
 		assertThat(tasks, notNullValue());
 		assertThat(tasks, hasSize(1));
-		assertThat(tasks, hasItem(reference("java:/Task")));
+		assertThat(tasks, hasItem(reference("java:Task")));
 
 		ArgumentCaptor<String> wordCaptor = ArgumentCaptor.forClass(String.class);
 		verify(listener, times(2)).onWordFound(wordCaptor.capture());
@@ -303,7 +302,7 @@ public class TasksRegistryTest {
 		registry.load();
 
 		// when
-		registry.add("list tasks", reference("java:/com.jslib.dotasks.ListTasks"));
+		registry.add("list tasks", reference("java:com.jslib.dotasks.ListTasks"));
 
 		// then
 		Iterator<String> words = Arrays.asList("define", "task").iterator();
@@ -322,7 +321,8 @@ public class TasksRegistryTest {
 	}
 
 	private static TaskReference reference(String uri) {
-		return new TaskReference(URI.create(uri), false);
+		String[] parts = uri.split(":");
+		return new TaskReference(parts[0], parts[1], false);
 	}
 
 	private static class DefineTask implements ITask {

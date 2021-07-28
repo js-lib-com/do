@@ -20,8 +20,7 @@ class JavaProcessor implements IProcessor {
 	@Override
 	public ITask getTask(TaskReference reference) {
 		log.trace("getTask(reference)");
-		// task reference path starts with separator, e.g. java:/com.jslib.dotasks.DefineTask
-		return Classes.newInstance(reference.getPath().substring(1));
+		return Classes.newInstance(reference.getPath());
 	}
 
 	@Override

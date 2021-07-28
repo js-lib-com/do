@@ -1,7 +1,5 @@
 package com.jslib.dotasks;
 
-import java.net.URI;
-
 import com.jslib.docli.TasksRegistry;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ReturnCode;
@@ -23,7 +21,7 @@ public class DefineTask extends DoTask {
 		log.trace("parameters()");
 		IParameters parameters = super.parameters();
 		parameters.define("command-path", String.class);
-		parameters.define("task-uri", "Task URI", URI.class);
+		parameters.define("task-uri", "Task URI", String.class);
 		parameters.define("contextual", "Contextual", Boolean.class, false);
 		return parameters;
 	}
@@ -35,7 +33,7 @@ public class DefineTask extends DoTask {
 		registry.load();
 
 		final String commandPath = parameters.get("command-path");
-		final URI taskURI = parameters.get("task-uri", URI.class);
+		final String taskURI = parameters.get("task-uri", String.class);
 		final boolean contextual = parameters.get("contextual", Boolean.class);
 		registry.add(commandPath, new TaskReference(taskURI, contextual));
 		return ReturnCode.SUCCESS;

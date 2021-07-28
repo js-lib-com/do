@@ -1,1 +1,1 @@
-{"root":{"children":{"define":{"children":{"task":{"children":null,"tasks":[{"uri":"java:/com.jslib.docli.TasksRegistryTest.DefineTask","contextual":false}]}},"tasks":null}},"tasks":null}}
+{"root":{"children":{"define":{"children":{"task":{"children":null,"tasks":[{"uri":"java:com.jslib.docli.TasksRegistryTest.DefineTask","contextual":false}]}},"tasks":null}},"tasks":null}}

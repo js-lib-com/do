@@ -1,6 +1,11 @@
 package com.jslib.dospi;
 
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import js.json.JsonException;
+import js.json.JsonLifeCycle;
 
 /**
  * Immutable value class for task references. This class is a URI constrained to specifics of task referencing: it has only
@@ -12,8 +17,12 @@ import java.net.URI;
  * 
  * @author Iulian Rotaru
  */
-public final class TaskReference implements Comparable<TaskReference> {
-	private URI uri;
+public final class TaskReference implements JsonLifeCycle, Comparable<TaskReference> {
+	private String uri;
+	private transient String scheme;
+	private transient String authority;
+	private transient String path;
+
 	/**
 	 * Contextual task should be executed in specific environment and has high priority. By contrast non contextual tasks can be
 	 * executed everywhere. This field is used by {@link #compareTo(TaskReference)} for comparison implementation.
@@ -23,9 +32,22 @@ public final class TaskReference implements Comparable<TaskReference> {
 	public TaskReference() {
 	}
 
-	public TaskReference(URI taskURI, boolean contextual) {
-		this.uri = taskURI;
+	public TaskReference(String scheme, String authority, String path, boolean contextual) {
+		this.scheme = scheme;
+		this.authority = authority;
+		this.path = path;
 		this.contextual = contextual;
+		preStringify();
+	}
+
+	public TaskReference(String scheme, String path, boolean contextual) {
+		this(scheme, null, path, contextual);
+	}
+
+	public TaskReference(String uri, boolean contextual) {
+		this.uri = uri;
+		this.contextual = contextual;
+		postParse();
 	}
 
 	/**
@@ -36,15 +58,50 @@ public final class TaskReference implements Comparable<TaskReference> {
 	 * @param contextual flag for contextual task.
 	 */
 	public TaskReference(Class<? extends ITask> taskClass, boolean contextual) {
-		this(URI.create("java:/" + taskClass.getCanonicalName()), contextual);
+		this("java", taskClass.getCanonicalName(), contextual);
+	}
+
+	@Override
+	public void preStringify() {
+		StringBuilder builder = new StringBuilder();
+		if (scheme != null) {
+			builder.append(scheme);
+			builder.append(':');
+		}
+		if (authority != null) {
+			builder.append("//");
+			builder.append(authority);
+			builder.append('/');
+		}
+		if (path != null) {
+			builder.append(path);
+		}
+		uri = builder.toString();
+	}
+
+	private static final Pattern URI_PATTERN = Pattern.compile("^([a-z]+)\\:(\\/\\/[^/]+\\/)?(.+)$");
+
+	@Override
+	public void postParse() {
+		Matcher matcher = URI_PATTERN.matcher(uri);
+		if (!matcher.find()) {
+			throw new JsonException("Invalid URI pattern.");
+		}
+		scheme = matcher.group(1);
+		authority = matcher.group(2);
+		path = matcher.group(3);
 	}
 
 	public String getScheme() {
-		return uri.getScheme();
+		return scheme;
+	}
+
+	public String getAuthority() {
+		return authority;
 	}
 
 	public String getPath() {
-		return uri.getPath();
+		return path;
 	}
 
 	public boolean isContextual() {
@@ -87,6 +144,6 @@ public final class TaskReference implements Comparable<TaskReference> {
 
 	@Override
 	public String toString() {
-		return uri.toASCIIString();
+		return uri;
 	}
 }

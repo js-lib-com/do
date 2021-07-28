@@ -28,8 +28,7 @@ public class ScriptProcessor implements IProcessor {
 	public ITask getTask(TaskReference reference) {
 		log.trace("getTask(reference)");
 		Path homeDir = Paths.get(Home.getPath());
-		// task URI path starts with path separator
-		Path scriptFile = homeDir.resolve("script" + reference.getPath());
+		Path scriptFile = homeDir.resolve("script/" + reference.getPath());
 		return new ScriptInterpreter(cli, scriptFile);
 	}
 

@@ -57,8 +57,7 @@ public class ImportTasks extends DoTask {
 
 				log.info("Import task %s", taskReference);
 				if ("file".equals(taskReference.getScheme())) {
-					// script file URI path starts with path separator
-					Path scriptFile = scriptDir.resolve(taskReference.getPath().substring(1));
+					Path scriptFile = scriptDir.resolve(taskReference.getPath());
 					log.info("Copy file %s", scriptFile);
 					files.copy(provider.getScriptReader(taskReference), files.getWriter(scriptFile));
 				}
