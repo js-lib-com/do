@@ -10,12 +10,12 @@ public interface IParameterDefinition<T> {
 
 	String label();
 
-	boolean isOptional();
+	Flags flags();
 
 	Class<T> type();
 
 	boolean hasDefaultValue();
 	
-	T defaultValue();
+	String defaultValue();
 	
 }

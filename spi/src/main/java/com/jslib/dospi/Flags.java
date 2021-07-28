@@ -6,5 +6,10 @@ package com.jslib.dospi;
  * @author Iulian Rotaru
  */
 public enum Flags {
-	NONE, MANDATORY, OPTIONAL
+	/** Mandatory parameter value. Empty user input is re-prompted. */
+	MANDATORY,
+	/** Optional parameter value can be null. */
+	OPTIONAL,
+	/** Parameter is command line argument only. Do not prompt user if value is not provided on command line. */
+	ARGUMENT
 }

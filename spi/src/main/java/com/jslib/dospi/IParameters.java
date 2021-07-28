@@ -53,12 +53,12 @@ public interface IParameters {
 	/** Position parameter with label inferred from parameter name. */
 	<T> void define(int position, String name, Flags flags, Class<T> type, @SuppressWarnings("unchecked") T... defaultValue);
 
-	/** Positional parameter with flags default value set to {@link Flags#NONE} which means the parameter is mandatory. */
+	/** Positional parameter with flags default value set to {@link Flags#MANDATORY}. */
 	<T> void define(int position, String name, String label, Class<T> type, @SuppressWarnings("unchecked") T... defaultValue);
 
 	/**
 	 * Positional parameter without label and flags. Label is inferred from parameter name whereas flags is set to
-	 * {@link Flags#NONE}.
+	 * {@link Flags#MANDATORY}.
 	 */
 	<T> void define(int position, String name, Class<T> type, @SuppressWarnings("unchecked") T... defaultValue);
 
@@ -76,12 +76,12 @@ public interface IParameters {
 	/** Named parameter with label inferred from parameter name. */
 	<T> void define(String name, Flags flags, Class<T> type, @SuppressWarnings("unchecked") T... defaultValue);
 
-	/** Named parameter with flags default value set to {@link Flags#NONE} which means the parameter is mandatory. */
+	/** Named parameter with flags default value set to {@link Flags#MANDATORY}. */
 	<T> void define(String name, String label, Class<T> type, @SuppressWarnings("unchecked") T... defaultValue);
 
 	/**
 	 * Named parameter without label and flags. Label is inferred from parameter name whereas flags is set to
-	 * {@link Flags#NONE}.
+	 * {@link Flags#MANDATORY}.
 	 */
 	<T> void define(String name, Class<T> type, @SuppressWarnings("unchecked") T... defaultValue);
 

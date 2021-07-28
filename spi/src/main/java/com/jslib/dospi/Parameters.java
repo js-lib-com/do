@@ -23,7 +23,7 @@ public class Parameters implements IParameters {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> void define(int position, String name, String label, Class<T> type, T... defaultValue) {
-		parameters.put(name, new Parameter<T>(position, name, label, Flags.NONE, type, optional(defaultValue)));
+		parameters.put(name, new Parameter<T>(position, name, label, Flags.MANDATORY, type, optional(defaultValue)));
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Parameters implements IParameters {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> void define(int position, String name, Class<T> type, T... defaultValue) {
-		parameters.put(name, new Parameter<T>(position, name, label(name), Flags.NONE, type, optional(defaultValue)));
+		parameters.put(name, new Parameter<T>(position, name, label(name), Flags.MANDATORY, type, optional(defaultValue)));
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class Parameters implements IParameters {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> void define(String name, String label, Class<T> type, T... defaultValue) {
-		parameters.put(name, new Parameter<T>(NO_PARAMETER_POSITION, name, label, Flags.NONE, type, optional(defaultValue)));
+		parameters.put(name, new Parameter<T>(NO_PARAMETER_POSITION, name, label, Flags.MANDATORY, type, optional(defaultValue)));
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class Parameters implements IParameters {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> void define(String name, Class<T> type, T... defaultValue) {
-		parameters.put(name, new Parameter<T>(NO_PARAMETER_POSITION, name, label(name), Flags.NONE, type, optional(defaultValue)));
+		parameters.put(name, new Parameter<T>(NO_PARAMETER_POSITION, name, label(name), Flags.MANDATORY, type, optional(defaultValue)));
 	}
 
 	private static String label(String name) {

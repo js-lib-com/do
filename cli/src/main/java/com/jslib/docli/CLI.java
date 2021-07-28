@@ -8,6 +8,7 @@ import java.util.SortedSet;
 
 import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.doprocessor.ProcessorFactory;
+import com.jslib.dospi.Flags;
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IParameterDefinition;
 import com.jslib.dospi.IParameters;
@@ -140,44 +141,51 @@ public class CLI implements IShell {
 			Object value = null;
 			while (value == null) {
 				String input = null;
-				boolean positional = false;
+				final Flags flags = definition.flags();
+
+				boolean positionalProvided = false;
 				if (definition.isPositional()) {
 					input = statement.getParameter(definition.position());
-					positional = input != null;
+					// if positional parameters is not provided on statement uses default value
+					// but only if parameter is marked as 'argument only' - see Flags.ARGUMENT
+					// otherwise left input to null and allow below logic to treat positional parameters as named
+					if (input == null && flags == Flags.ARGUMENT) {
+						input = definition.defaultValue();
+					}
+					positionalProvided = input != null;
 				}
+
+				// if parameter is not positional input is null because above positional parameter handling was not performed
+				// if parameter is positional but value was not provided on statement input is still null
 				if (input == null) {
-					if (statement.hasParameters() && definition.isPositional() && definition.isOptional()) {
-						input = "";
+					if (definition.hasDefaultValue()) {
+						input = console.input(definition.label(), definition.defaultValue());
 					} else {
-						if (definition.hasDefaultValue()) {
-							input = console.input(definition.label(), definition.defaultValue().toString());
-						} else {
-							input = console.input(definition.label());
-						}
+						input = console.input(definition.label());
 					}
 				}
 				input = input.trim();
 
-				if (definition.isOptional() && input.isEmpty()) {
-					parameters.add(definition.name(), null);
-					break;
-				}
 				if (input.isEmpty()) {
-					log.debug("Empty user input. Retry.");
-					continue;
+					if (flags == Flags.OPTIONAL) {
+						parameters.add(definition.name(), null);
+						break;
+					}
+					if (flags == Flags.MANDATORY) {
+						log.debug("Empty user input. Retry.");
+						continue;
+					}
 				}
 
 				try {
 					value = converter.asObject(input, definition.type());
 				} catch (ConverterException e) {
-					if (Types.isEnum(definition.type())) {
-						log.warn("Invalid value. Should be one of: %s", Strings.join(definition.type().getEnumConstants(), ", "));
-						if (positional) {
-							break;
-						}
-					} else {
-						log.warn(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+					if (positionalProvided) {
+						// abort task if positional parameter was provided on statement and value was invalid
+						// otherwise we enter an infinite loop
+						throw new TaskAbortException(invalidValue(definition, input, e));
 					}
+					log.warn(invalidValue(definition, input, e));
 					continue;
 				}
 				parameters.add(definition.name(), value);
@@ -185,6 +193,13 @@ public class CLI implements IShell {
 		}
 		parameters.setArguments(statement.getParameters());
 		return parameters;
+	}
+
+	private static String invalidValue(IParameterDefinition<?> definition, String value, ConverterException e) {
+		if (Types.isEnum(definition.type())) {
+			return String.format("Invalid value '%s'. Should be one of: %s", value, Strings.join(definition.type().getEnumConstants(), ", "));
+		}
+		return String.format("Invalid value '%s': %s", value, e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 	}
 
 	private void handleFlags(Statement statement) throws IOException {

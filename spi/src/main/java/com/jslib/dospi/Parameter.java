@@ -1,12 +1,17 @@
 package com.jslib.dospi;
 
+import js.converter.Converter;
+import js.converter.ConverterRegistry;
+
 public class Parameter<T> implements IParameterDefinition<T> {
+	private static final Converter converter = ConverterRegistry.getConverter();
+	
 	private final int position;
 	private final String name;
 	private final String label;
 	private final Flags flags;
 	private final Class<T> type;
-	private final T defaultValue;
+	private final String defaultValue;
 
 	private T value;
 
@@ -16,7 +21,7 @@ public class Parameter<T> implements IParameterDefinition<T> {
 		this.label = label;
 		this.flags = flags;
 		this.type = type;
-		this.defaultValue = defaultValue;
+		this.defaultValue = converter.asString(defaultValue);
 	}
 
 	@Override
@@ -40,6 +45,11 @@ public class Parameter<T> implements IParameterDefinition<T> {
 	}
 
 	@Override
+	public Flags flags() {
+		return flags;
+	}
+
+	@Override
 	public Class<T> type() {
 		return type;
 	}
@@ -50,13 +60,8 @@ public class Parameter<T> implements IParameterDefinition<T> {
 	}
 
 	@Override
-	public T defaultValue() {
+	public String defaultValue() {
 		return defaultValue;
-	}
-
-	@Override
-	public boolean isOptional() {
-		return flags == Flags.OPTIONAL;
 	}
 
 	public void value(T value) {
