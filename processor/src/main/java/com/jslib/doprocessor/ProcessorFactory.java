@@ -19,7 +19,7 @@ public class ProcessorFactory implements IProcessorFactory {
 	public IProcessor getProcessor(TaskReference reference) {
 		log.trace("getProcessor(reference)");
 		Params.notNull(reference, "Task reference");
-		Params.notNull(reference.getScheme(), "Task URI scheme");
+		Params.notNull(reference.getScheme(), "Task reference scheme");
 
 		switch (reference.getScheme()) {
 		case "java":

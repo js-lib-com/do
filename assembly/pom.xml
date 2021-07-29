@@ -17,7 +17,7 @@
   	</dependency>
   	<dependency>
   		<groupId>com.js-lib.do</groupId>
-  		<artifactId>do-task</artifactId>
+  		<artifactId>do-tasks</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>

@@ -90,7 +90,7 @@ public class Main {
 		if (stackTrace) {
 			StringWriter buffer = new StringWriter();
 			t.printStackTrace(new PrintWriter(buffer));
-			cli.getConsole().print(buffer.toString());
+			cli.getConsole().println(buffer.toString());
 		} else {
 			StringBuilder message = new StringBuilder();
 			message.append(t.getClass().getSimpleName());
@@ -98,7 +98,7 @@ public class Main {
 				message.append(": ");
 				message.append(t.getMessage());
 			}
-			cli.getConsole().print(message.toString());
+			cli.getConsole().println(message.toString());
 		}
 	}
 

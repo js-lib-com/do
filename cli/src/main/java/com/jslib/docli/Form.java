@@ -51,7 +51,7 @@ public class Form implements IForm {
 	@Override
 	public IFormData submit() {
 		FormData data = new FormData();
-		console.print(legend);
+		console.println(legend);
 
 		for (Field<?> field : fields) {
 			Object value = null;

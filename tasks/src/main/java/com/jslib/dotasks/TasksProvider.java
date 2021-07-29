@@ -21,9 +21,11 @@ public class TasksProvider implements ITasksProvider {
 		TASKS.put("define task", new TaskReference(DefineTask.class, false));
 		TASKS.put("delete stop words", new TaskReference(DeleteStopWords.class, false));
 		TASKS.put("delete task", new TaskReference(DeleteTask.class, false));
+		TASKS.put("import provider", new TaskReference(ImportProvider.class, false));
 		TASKS.put("import tasks", new TaskReference(ImportTasks.class, false));
 		TASKS.put("list tasks", new TaskReference(ListTasks.class, false));
 		TASKS.put("list stop words", new TaskReference(ListStopWords.class, false));
+		TASKS.put("update do-cli", new TaskReference(UpdateDoCLI.class, false));
 	}
 
 	public TasksProvider() {

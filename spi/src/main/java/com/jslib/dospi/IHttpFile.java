@@ -12,7 +12,7 @@ public interface IHttpFile
 
   LocalDateTime getModificationTime();
 
-  long getSize();
+  int getSize();
 
   boolean isAfter(IHttpFile other);
 

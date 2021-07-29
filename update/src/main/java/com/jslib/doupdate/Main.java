@@ -36,7 +36,7 @@ public class Main {
 	private static final Pattern JAR_PATH_PATTERN = Pattern.compile("^(.+)[\\\\/]bin[\\\\/](.+\\.jar)$");
 
 	// D:\java\wood-1.0\bin\wood-assembly-1.0.5-SNAPSHOT.zip
-	private static final Pattern ASSEMBLY_FILE_PATTERN = Pattern.compile("^assembly.+\\.zip$");
+	private static final Pattern ASSEMBLY_FILE_PATTERN = Pattern.compile("^do-assembly.+\\.zip$");
 
 	private final boolean verbose;
 
@@ -63,15 +63,15 @@ public class Main {
 		
 
 		print("");
-		print("WOOD Updater: %s", updaterJar);
+		print("Do CLI Updater: %s", updaterJar);
 
 		File assemblyFile = assemblyFile(homeDir);
 		if (assemblyFile == null) {
-			throw new RuntimeException("Invalid WOOD updater invocation. Missing downloaded assembly file.");
+			throw new RuntimeException("Invalid Do CLI updater invocation. Missing downloaded assembly file.");
 		}
 		File propertiesFile = new File(homeDir, "bin/wood.properties");
 
-		print("WOOD Assembly: %s...", assemblyFile.getName());
+		print("Do CLI Assembly: %s...", assemblyFile.getName());
 
 		if (verbose) {
 			print("");
@@ -111,6 +111,7 @@ public class Main {
 	}
 
 	private void cleanDirectory(File dir, File... excludes) throws IOException {
+		dir.mkdirs();
 		cleanDirectory(dir, Arrays.asList(excludes));
 	}
 

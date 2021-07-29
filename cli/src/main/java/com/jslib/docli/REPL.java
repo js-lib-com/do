@@ -20,7 +20,7 @@ public class REPL {
 
 	public void loop() throws Exception {
 		log.trace("loop()");
-		console.print("Do REPL - ver. 0.0.1-SNAPSHOT, July 2021.");
+		console.println("Do REPL - ver. 0.0.1-SNAPSHOT, July 2021.");
 		console.crlf();
 
 		boolean verbose = false;

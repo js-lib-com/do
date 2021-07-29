@@ -54,7 +54,7 @@ public class MarkdownConsole {
 					break;
 
 				case ODD_ROW:
-					console.print(md(line));
+					console.println(md(line));
 					tableState = TableState.EVEN_ROW;
 					break;
 				}
@@ -81,7 +81,7 @@ public class MarkdownConsole {
 				continue;
 			}
 
-			console.print(md(line));
+			console.println(md(line));
 		}
 	}
 
