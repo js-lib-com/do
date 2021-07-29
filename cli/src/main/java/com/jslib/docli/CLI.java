@@ -10,6 +10,7 @@ import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IConsole;
+import com.jslib.dospi.IForm;
 import com.jslib.dospi.IParameterDefinition;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
@@ -71,6 +72,11 @@ public class CLI implements IShell {
 	@Override
 	public IPrintout getPrintout() {
 		return (IPrintout) Proxy.newProxyInstance(IPrintout.class.getClassLoader(), new Class[] { IPrintout.class }, new Printout(console));
+	}
+
+	@Override
+	public IForm getForm() {
+		return new Form(console);
 	}
 
 	public ReturnCode execute(Statement statement) throws Exception {

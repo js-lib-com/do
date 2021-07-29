@@ -12,4 +12,5 @@ public interface IShell {
 	
 	IPrintout getPrintout();
 
+	IForm getForm();
 }
