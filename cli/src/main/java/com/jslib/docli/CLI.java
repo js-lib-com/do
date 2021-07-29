@@ -16,6 +16,7 @@ import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
+import com.jslib.dospi.IProgress;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
@@ -79,6 +80,11 @@ public class CLI implements IShell {
 		return new Form(console);
 	}
 
+	@Override
+	public IProgress<Integer> getProgress(Integer size) {
+		return Logging.isVerbose() ? new Progress(console, size) : null;
+	}
+
 	public ReturnCode execute(Statement statement) throws Exception {
 		log.trace("execute(statement)");
 		log.debug("Statement arguments: %s", statement._arguments());
@@ -123,7 +129,7 @@ public class CLI implements IShell {
 
 		ITaskInfo info = task.getInfo();
 		if (statement.hasOption("verbose", "v")) {
-			console.print(TASK_INFO_FOMRATTER, info);
+			console.println(TASK_INFO_FOMRATTER, info);
 			console.crlf();
 		}
 
@@ -225,12 +231,12 @@ public class CLI implements IShell {
 
 	private void onHelp() {
 		log.trace("onHelp()");
-		console.print("Do CLI - 0.0.1-SNAPSHOT");
+		console.println("Do CLI - 0.0.1-SNAPSHOT");
 	}
 
 	private void onVersion() {
 		log.trace("onVersion()");
-		console.print("Do CLI - 0.0.1-SNAPSHOT");
+		console.println("Do CLI - 0.0.1-SNAPSHOT");
 	}
 
 	private static class CliProcessorFactory extends ProcessorFactory {

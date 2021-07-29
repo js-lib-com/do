@@ -2,10 +2,12 @@ package com.jslib.dospi;
 
 public interface IConsole {
 
-	void print(String format, Object... args);
+	void println(String format, Object... args);
 
-	<T> void print(IFormatter<T> formatter, T object);
+	<T> void println(IFormatter<T> formatter, T object);
 
+	String prompt(String format, Object... args);
+	
 	/**
 	 * Display action message to user and wait for confirmation. Throws exception if user denies the action.
 	 * 

@@ -14,9 +14,18 @@ public class Console implements IConsole {
 	private static final BufferedReader STDIN = new BufferedReader(new InputStreamReader(System.in));
 
 	@Override
-	public void print(String format, Object... args) {
+	public void println(String format, Object... args) {
 		System.out.printf(format, args);
 		System.out.println();
+	}
+
+	@Override
+	public <T> void println(IFormatter<T> formatter, T object) {
+		System.out.println(formatter.format(object));
+	}
+
+	public void print(String format, Object... args) {
+		System.out.printf(format, args);
 	}
 
 	/**
@@ -42,12 +51,8 @@ public class Console implements IConsole {
 	}
 
 	@Override
-	public <T> void print(IFormatter<T> formatter, T object) {
-		System.out.println(formatter.format(object));
-	}
-
-	public String prompt(String message) {
-		System.out.print(message);
+	public String prompt(String format, Object... args) {
+		System.out.printf(format, args);
 		System.out.print(": ");
 		return readLine();
 	}

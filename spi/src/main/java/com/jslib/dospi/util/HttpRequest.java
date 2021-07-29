@@ -55,7 +55,7 @@ public class HttpRequest {
 					throw new IOException(format("Fail to download %s.", remoteFile));
 				}
 
-				byte[] buffer = new byte[65535];
+				byte[] buffer = new byte[1024];
 				try (BufferedInputStream inputStream = new BufferedInputStream(response.getEntity().getContent()); BufferedOutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(localFile), buffer.length)) {
 					int len;
 					while ((len = inputStream.read(buffer)) > 0) {
@@ -63,6 +63,9 @@ public class HttpRequest {
 						if (progress != null) {
 							progress.onProgress(len);
 						}
+					}
+					if (progress != null) {
+						progress.onProgress(-1);
 					}
 				}
 			}
@@ -86,7 +89,7 @@ public class HttpRequest {
 				ZonedDateTime modificationTime = LocalDateTime.parse(dateElement.getText().trim(), modificationTimeFormatter).atZone(ZoneId.of("UTC"));
 
 				Element sizeElement = dateElement.getNextSibling();
-				long fileSize = fileSize(sizeElement.getText().trim());
+				int fileSize = fileSize(sizeElement.getText().trim());
 
 				files.add(new File(remoteDir.resolve(fileName), fileName, modificationTime, fileSize));
 			}
@@ -118,10 +121,10 @@ public class HttpRequest {
 
 	private static final Pattern FILE_SIZE_PATTERN = Pattern.compile("^(\\d+(?:\\.\\d+)?)(K|M|G|T)?$", Pattern.CASE_INSENSITIVE);
 
-	private static long fileSize(String value) {
+	private static int fileSize(String value) {
 		Matcher matcher = FILE_SIZE_PATTERN.matcher(value);
 		if (!matcher.find()) {
-			return 0L;
+			return 0;
 		}
 		Double fileSize = Double.parseDouble(matcher.group(1));
 		if (matcher.group(2) != null) {
@@ -140,16 +143,16 @@ public class HttpRequest {
 				break;
 			}
 		}
-		return fileSize.longValue();
+		return fileSize.intValue();
 	}
 
 	private static class File implements IHttpFile {
 		private final URI uri;
 		private final String name;
 		private final ZonedDateTime modificationTime;
-		private final long size;
+		private final int size;
 
-		public File(URI uri, String name, ZonedDateTime modificationTime, long size) {
+		public File(URI uri, String name, ZonedDateTime modificationTime, int size) {
 			this.uri = uri;
 			this.name = name;
 			this.modificationTime = modificationTime;
@@ -168,7 +171,7 @@ public class HttpRequest {
 			return modificationTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 		}
 
-		public long getSize() {
+		public int getSize() {
 			return size;
 		}
 

@@ -8,9 +8,10 @@ import org.apache.log4j.Logger;
 import com.jcabi.log.MulticolorLayout;
 
 public class Logging {
+	private static boolean verbose = false;
+	private static Level level = null;
+
 	public static void configure(String... args) {
-		Level level = null;
-		boolean verbose = false;
 		for (String arg : args) {
 			switch (arg) {
 			case "--trace":
@@ -58,8 +59,15 @@ public class Logging {
 	}
 
 	public static void setVerbose(boolean verbose) {
+		Logging.verbose = verbose;
+		Logging.level = verbose ? Level.INFO : Level.WARN;
+
 		Logger root = LogManager.getRootLogger();
 		ConsoleAppender appender = (ConsoleAppender) root.getAppender("console");
-		appender.setThreshold(verbose ? Level.INFO : Level.WARN);
+		appender.setThreshold(Logging.level);
+	}
+
+	public static boolean isVerbose() {
+		return verbose;
 	}
 }
