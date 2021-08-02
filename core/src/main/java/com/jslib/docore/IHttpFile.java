@@ -1,4 +1,4 @@
-package com.jslib.dospi;
+package com.jslib.docore;
 
 import java.net.URI;
 import java.time.LocalDateTime;

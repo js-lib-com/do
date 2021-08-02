@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.jslib.docli.Home;
+import com.jslib.docore.FileUtils;
+import com.jslib.docore.HttpRequest;
+import com.jslib.docore.IHttpFile;
+import com.jslib.docore.IProgress;
 import com.jslib.dospi.IConsole;
-import com.jslib.dospi.IHttpFile;
 import com.jslib.dospi.IParameters;
-import com.jslib.dospi.IProgress;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskAbortException;
-import com.jslib.dospi.util.FileUtils;
-import com.jslib.dospi.util.HttpRequest;
 
 import js.format.FileSize;
 import js.log.Log;

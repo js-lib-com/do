@@ -1,4 +1,4 @@
-package com.jslib.dospi.util;
+package com.jslib.docore;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

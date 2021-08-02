@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import com.jslib.docli.TasksRegistry;
+import com.jslib.docore.FileUtils;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskReference;
-import com.jslib.dospi.util.FileUtils;
 
 import js.log.Log;
 import js.log.LogFactory;

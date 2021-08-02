@@ -1,6 +1,6 @@
 package com.jslib.docli;
 
-import com.jslib.dospi.IProgress;
+import com.jslib.docore.IProgress;
 
 import js.util.Params;
 

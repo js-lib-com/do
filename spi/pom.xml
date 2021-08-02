@@ -11,19 +11,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.js-lib</groupId>
-			<artifactId>js-dom-api</artifactId>
-			<version>1.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>4.5.12</version>
+			<groupId>com.js-lib.do</groupId>
+			<artifactId>do-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

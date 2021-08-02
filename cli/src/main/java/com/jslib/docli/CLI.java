@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.SortedSet;
 
 import com.jslib.docli.script.ScriptProcessor;
+import com.jslib.docore.IProgress;
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IConsole;
@@ -16,7 +17,6 @@ import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
-import com.jslib.dospi.IProgress;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;

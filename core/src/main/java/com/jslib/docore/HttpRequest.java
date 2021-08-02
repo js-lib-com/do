@@ -1,4 +1,4 @@
-package com.jslib.dospi.util;
+package com.jslib.docore;
 
 import static java.lang.String.format;
 
@@ -26,9 +26,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.xml.sax.SAXException;
-
-import com.jslib.dospi.IHttpFile;
-import com.jslib.dospi.IProgress;
 
 import js.dom.Document;
 import js.dom.DocumentBuilder;
