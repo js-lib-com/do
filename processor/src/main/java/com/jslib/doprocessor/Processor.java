@@ -8,6 +8,7 @@ import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
+import com.jslib.dospi.Parameters;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskReference;
 
@@ -34,12 +35,12 @@ public abstract class Processor implements IProcessor {
 
 		@Override
 		public IParameters parameters() {
-			return null;
+			return new Parameters();
 		}
 
 		@Override
 		public ReturnCode execute(IParameters parameters) throws Exception {
-			return null;
+			return ReturnCode.SUCCESS;
 		}
 
 		@Override
@@ -56,27 +57,27 @@ public abstract class Processor implements IProcessor {
 	private static class TaskInfo implements ITaskInfo {
 		@Override
 		public String getDisplay() {
-			return null;
+			return "Task Display";
 		}
 
 		@Override
 		public String getDescription() {
-			return null;
+			return "Task description.";
 		}
 
 		@Override
 		public String getVersion() {
-			return null;
+			return "1.0";
 		}
 
 		@Override
 		public LocalDate getLastUpdate() {
-			return null;
+			return LocalDate.now();
 		}
 
 		@Override
 		public String getAuthor() {
-			return null;
+			return "Iulian Rotaru";
 		}
 	}
 }

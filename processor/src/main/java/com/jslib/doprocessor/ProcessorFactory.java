@@ -22,6 +22,9 @@ public class ProcessorFactory implements IProcessorFactory {
 		Params.notNull(reference.getScheme(), "Task reference scheme");
 
 		switch (reference.getScheme()) {
+		case "cmd":
+			return new CmdProcessor();
+			
 		case "java":
 			return new JavaProcessor();
 
