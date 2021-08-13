@@ -1,13 +1,20 @@
 package com.jslib.docli;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Proxy;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.SortedSet;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.docore.IProgress;
+import com.jslib.docore.IProperties;
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IConsole;
@@ -33,7 +40,8 @@ import js.log.LogFactory;
 import js.util.Strings;
 import js.util.Types;
 
-public class CLI implements IShell {
+@Singleton
+public class CLI implements IShell, IProperties {
 	private static final Log log = LogFactory.getLog(CLI.class);
 
 	private static final TaskInfoFormatter TASK_INFO_FOMRATTER = new TaskInfoFormatter();
@@ -43,6 +51,7 @@ public class CLI implements IShell {
 	private final IProcessorFactory processorFactory;
 	private final TasksRegistry registry;
 
+	@Inject
 	public CLI(Console console) {
 		log.trace("CLI(console)");
 		this.converter = ConverterRegistry.getConverter();
@@ -119,7 +128,6 @@ public class CLI implements IShell {
 		}
 
 		log.debug("Executing task %s ...", task);
-		task.setShell(this);
 
 		if (statement.hasTaskHelp()) {
 			MarkdownConsole markdownConsole = new MarkdownConsole(console);
@@ -237,6 +245,26 @@ public class CLI implements IShell {
 	private void onVersion() {
 		log.trace("onVersion()");
 		console.println("Do CLI - 0.0.1-SNAPSHOT");
+	}
+
+	private final Properties properties = new Properties();
+
+	@Override
+	public <T> T getProperty(String key, Class<T> type) {
+		if (properties.isEmpty()) {
+			synchronized (properties) {
+				if (properties.isEmpty()) {
+					Path binDir = Paths.get(Home.getPath()).resolve("bin");
+					Path propertiesFile = binDir.resolve("do.properties");
+					try (Reader reader = Files.newBufferedReader(propertiesFile)) {
+						properties.load(reader);
+					} catch (IOException e) {
+						log.error(e);
+					}
+				}
+			}
+		}
+		return converter.asObject(properties.getProperty(key), type);
 	}
 
 	private static class CliProcessorFactory extends ProcessorFactory {

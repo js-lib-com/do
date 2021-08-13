@@ -3,9 +3,6 @@ package com.jslib.dospi;
 import java.io.IOException;
 
 public interface ITask {
-
-	void setShell(IShell shell);
-
 	/**
 	 * Test if task is executed in the proper context. What is proper depends entirely on task implementation; for example a
 	 * task needs a specific files system layout.

@@ -4,14 +4,17 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeMap;
 
+import javax.inject.Inject;
+
 import com.jslib.docli.TasksRegistry;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
+import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
-import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
+import com.jslib.dospi.TaskReference;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -19,9 +22,13 @@ import js.log.LogFactory;
 public class ListTasks extends DoTask {
 	private static final Log log = LogFactory.getLog(ListTasks.class);
 
-	public ListTasks() {
+	private final IShell shell;
+
+	@Inject
+	public ListTasks(IShell shell) {
 		super();
-		log.trace("ListTasks()");
+		log.trace("ListTasks(shell)");
+		this.shell = shell;
 	}
 
 	@Override

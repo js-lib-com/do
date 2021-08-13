@@ -14,6 +14,4 @@ public interface IHttpFile
 
   int getSize();
 
-  boolean isAfter(IHttpFile other);
-
 }

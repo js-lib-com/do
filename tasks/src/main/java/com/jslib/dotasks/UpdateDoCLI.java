@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import com.jslib.docli.Home;
-import com.jslib.docore.FileUtils;
-import com.jslib.docore.HttpRequest;
+import com.jslib.docore.IApacheIndex;
+import com.jslib.docore.IFiles;
 import com.jslib.docore.IHttpFile;
+import com.jslib.docore.IHttpRequest;
 import com.jslib.docore.IProgress;
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IParameters;
+import com.jslib.dospi.IShell;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskAbortException;
 
@@ -32,13 +36,19 @@ public class UpdateDoCLI extends DoTask {
 	private static final DateTimeFormatter modificationTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	private static final FileSize fileSizeFormatter = new FileSize();
 
-	private final FileUtils files;
-	private final HttpRequest httpRequest;
+	private final IShell shell;
+	private final IFiles files;
+	private final IHttpRequest http;
+	private final IApacheIndex apache;
 
-	public UpdateDoCLI() {
-		log.trace("UpdateDoCLI()");
-		this.files = new FileUtils();
-		this.httpRequest = new HttpRequest();
+	@Inject
+	public UpdateDoCLI(IShell shell, IFiles files, IHttpRequest http, IApacheIndex apache) {
+		super();
+		log.trace("UpdateDoCLI(shell, files, http, apache)");
+		this.shell = shell;
+		this.files = files;
+		this.http = http;
+		this.apache = apache;
 	}
 
 	@Override
@@ -51,12 +61,12 @@ public class UpdateDoCLI extends DoTask {
 			log.info("%s %s\t%s", modificationTimeFormatter.format(file.getModificationTime()), fileSizeFormatter.format(file.getSize()), file.getName());
 		};
 
-		IHttpFile assemblyDir = httpRequest.scanLatestFileVersion(DISTRIBUTION_URI, ARCHIVE_DIRECTORY_PATTERN, fileProgress);
+		IHttpFile assemblyDir = apache.scanLatestFileVersion(DISTRIBUTION_URI, ARCHIVE_DIRECTORY_PATTERN, fileProgress);
 		if (assemblyDir == null) {
 			throw new TaskAbortException("Empty Do CLI assemblies repository %s.", DISTRIBUTION_URI);
 		}
 
-		IHttpFile assemblyFile = httpRequest.scanLatestFileVersion(assemblyDir.getURI(), ARCHIVE_FILE_PATTERN, fileProgress);
+		IHttpFile assemblyFile = apache.scanLatestFileVersion(assemblyDir.getURI(), ARCHIVE_FILE_PATTERN, fileProgress);
 		if (assemblyFile == null) {
 			throw new TaskAbortException("Invalid Do CLI assembly version %s. No assembly found.", assemblyDir.getURI());
 		}
@@ -82,7 +92,7 @@ public class UpdateDoCLI extends DoTask {
 
 		log.info("Download Do CLI assembly %s.", assemblyFile.getName());
 		Path downloadFile = homeDir.resolve(assemblyFile.getName());
-		httpRequest.download(assemblyFile.getURI(), downloadFile, shell.getProgress(assemblyFile.getSize()));
+		http.download(assemblyFile.getURI(), downloadFile, shell.getProgress(assemblyFile.getSize()));
 		System.out.println();
 
 		log.info("Download complete. Start Do CLI install update.");

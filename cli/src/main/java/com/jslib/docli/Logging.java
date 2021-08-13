@@ -53,9 +53,11 @@ public class Logging {
 		appender.setThreshold(level);
 		appender.activateOptions();
 
-		Logger root = LogManager.getRootLogger();
-		root.setLevel(Level.ALL);
-		root.addAppender(appender);
+		LogManager.getRootLogger().setLevel(Level.OFF);
+
+		Logger logger = LogManager.getLogger("com.jslib");
+		logger.setLevel(Level.ALL);
+		logger.addAppender(appender);
 	}
 
 	public static void setVerbose(boolean verbose) {

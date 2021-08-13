@@ -16,7 +16,7 @@ import js.log.Log;
 import js.log.LogFactory;
 import js.util.Classes;
 
-public class StopWords implements Iterable<String> {
+class StopWords implements IStopWords {
 	private static final Log log = LogFactory.getLog(StopWords.class);
 
 	private static final String FILE_NAME = "stop-words.json";
@@ -42,18 +42,21 @@ public class StopWords implements Iterable<String> {
 		}
 	}
 
+	@Override
 	public void add(String word) throws IOException {
 		log.trace("add(word)");
 		list.add(word);
 		save();
 	}
 
+	@Override
 	public void remove(String word) throws IOException {
 		log.trace("remove(word)");
 		list.remove(word);
 		save();
 	}
 
+	@Override
 	public boolean contains(String word) {
 		return list.contains(word);
 	}

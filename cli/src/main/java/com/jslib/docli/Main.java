@@ -6,6 +6,7 @@ import java.io.StringWriter;
 
 import org.fusesource.jansi.AnsiConsole;
 
+import com.jslib.docore.Do;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -19,6 +20,8 @@ public class Main {
 		AnsiConsole.systemInstall();
 		Logging.configure(args);
 		log.trace("main(String...)");
+
+		Do.getInjector(new CLIModule());
 
 		long start = System.nanoTime();
 		ReturnCode returnCode = ReturnCode.SUCCESS;

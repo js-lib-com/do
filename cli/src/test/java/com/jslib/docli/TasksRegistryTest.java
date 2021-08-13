@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.jslib.dospi.IParameters;
-import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
 import com.jslib.dospi.ITasksProvider;
@@ -327,10 +327,6 @@ public class TasksRegistryTest {
 
 	private static class DefineTask implements ITask {
 		@Override
-		public void setShell(IShell shell) {
-		}
-
-		@Override
 		public boolean isExecutionContext() {
 			return false;
 		}
@@ -360,6 +356,16 @@ public class TasksRegistryTest {
 		@Override
 		public String getName() {
 			return "built-in";
+		}
+
+		@Override
+		public List<Class<? extends ITask>> getTasksList() {
+			return Arrays.asList(DefineTask.class);
+		}
+
+		@Override
+		public List<Class<?>> getDependencies() {
+			return Collections.emptyList();
 		}
 
 		@Override

@@ -1,10 +1,11 @@
 package com.jslib.doprocessor;
 
+import com.jslib.docore.Do;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.ITask;
-import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
+import com.jslib.dospi.TaskReference;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -20,7 +21,8 @@ class JavaProcessor implements IProcessor {
 	@Override
 	public ITask getTask(TaskReference reference) {
 		log.trace("getTask(reference)");
-		return Classes.newInstance(reference.getPath());
+		Class<? extends ITask> type = Classes.forName(reference.getPath());
+		return Do.getInjector().getInstance(type);
 	}
 
 	@Override

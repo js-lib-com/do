@@ -3,12 +3,11 @@ package com.jslib.doprocessor;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import com.jslib.dospi.AbstractTask;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
-import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
-import com.jslib.dospi.Parameters;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskReference;
 
@@ -23,19 +22,10 @@ public abstract class Processor implements IProcessor {
 	 * 
 	 * @author Iulian Rotaru
 	 */
-	private static class TaskProxy implements ITask {
-		@Override
-		public void setShell(IShell shell) {
-		}
-
+	private static class TaskProxy extends AbstractTask {
 		@Override
 		public boolean isExecutionContext() {
 			return true;
-		}
-
-		@Override
-		public IParameters parameters() {
-			return new Parameters();
 		}
 
 		@Override

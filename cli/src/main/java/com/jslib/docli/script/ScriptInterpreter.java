@@ -9,11 +9,11 @@ import java.util.List;
 
 import com.jslib.docli.CLI;
 import com.jslib.docli.Statement;
+import com.jslib.dospi.Flags;
+import com.jslib.dospi.IParameterDefinition;
 import com.jslib.dospi.IParameters;
-import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
-import com.jslib.dospi.Parameters;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -60,6 +60,11 @@ class ScriptInterpreter implements ITask {
 	}
 
 	@Override
+	public IParameters parameters() {
+		return new Parameters();
+	}
+
+	@Override
 	public ReturnCode execute(IParameters parameters) throws Exception {
 		log.trace("execute(parameters)");
 		for (String statement : statements) {
@@ -74,17 +79,8 @@ class ScriptInterpreter implements ITask {
 	}
 
 	@Override
-	public void setShell(IShell shell) {
-	}
-
-	@Override
 	public boolean isExecutionContext() {
 		return true;
-	}
-
-	@Override
-	public IParameters parameters() {
-		return new Parameters();
 	}
 
 	@Override
@@ -95,5 +91,99 @@ class ScriptInterpreter implements ITask {
 	@Override
 	public String help() throws IOException {
 		return "Script help.";
+	}
+	
+	private static class Parameters implements IParameters {
+
+		@Override
+		public <T> void define(int position, String name, String label, Flags flags, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(int position, String name, Flags flags, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(int position, String name, String label, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(int position, String name, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(String name, String label, Flags flags, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(String name, Flags flags, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(String name, String label, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <T> void define(String name, Class<T> type, T... defaultValue) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Iterable<IParameterDefinition<?>> definitions() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public <T> void add(String name, T value) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setArguments(List<String> arguments) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean has(String name) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public String get(String name) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public <T> T get(String name, Class<T> type) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public List<String> getArguments() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	}
 }

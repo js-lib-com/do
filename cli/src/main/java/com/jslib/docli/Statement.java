@@ -26,7 +26,7 @@ import js.util.Strings;
 public class Statement {
 	private static final Log log = LogFactory.getLog(Statement.class);
 
-	private final StopWords stopWords;
+	private final IStopWords stopWords;
 
 	/** Arguments list, as provided by user on command line. It contains command followed by parameters. */
 	private final List<String> arguments;

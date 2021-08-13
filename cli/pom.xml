@@ -11,14 +11,19 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.js-lib.do</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>do-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.js-lib.do</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>do-spi</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>do-processor</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -34,11 +39,6 @@
 			<groupId>org.fusesource.jansi</groupId>
 			<artifactId>jansi</artifactId>
 			<version>2.3.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.js-lib.do</groupId>
-			<artifactId>do-processor</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

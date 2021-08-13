@@ -4,23 +4,23 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.js-lib.do</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-    <artifactId>do-pom</artifactId>
-  </parent>
-  <artifactId>do-assembly</artifactId>
-  
-  <dependencies>
-  	<dependency>
-  		<groupId>com.js-lib.do</groupId>
-  		<artifactId>do-cli</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.js-lib.do</groupId>
-  		<artifactId>do-tasks</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+		<version>0.0.1-SNAPSHOT</version>
+		<artifactId>do-pom</artifactId>
+	</parent>
+	<artifactId>do-assembly</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>do-cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>do-tasks</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -46,5 +46,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>  
+	</build>
 </project>

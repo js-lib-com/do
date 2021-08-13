@@ -2,9 +2,12 @@ package com.jslib.dotasks;
 
 import java.io.IOException;
 
-import com.jslib.docli.StopWords;
+import javax.inject.Inject;
+
+import com.jslib.docli.IStopWords;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
+import com.jslib.dospi.IShell;
 import com.jslib.dospi.ReturnCode;
 
 import js.log.Log;
@@ -13,11 +16,14 @@ import js.log.LogFactory;
 public class ListStopWords extends DoTask {
 	private static final Log log = LogFactory.getLog(ListStopWords.class);
 
-	private final StopWords stopWords;
+	private final IShell shell;
+	private final IStopWords stopWords;
 
-	public ListStopWords() throws IOException {
-		log.trace("ListStopWords()");
-		this.stopWords = new StopWords();
+	@Inject
+	public ListStopWords(IShell shell, IStopWords stopWords) throws IOException {
+		log.trace("ListStopWords(shell, stopWords)");
+		this.shell = shell;
+		this.stopWords = stopWords;
 	}
 
 	@Override

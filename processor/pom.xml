@@ -11,9 +11,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.js-lib.do</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>do-spi</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>
