@@ -8,7 +8,7 @@ import js.lang.BugError;
 
 public class Home {
 	/**
-	 * By convention, main class jar is located on 'bin' directory from distribution home. This regular expression pattern
+	 * By convention, main class jar is located in 'bin' directory from distribution home. This regular expression pattern
 	 * captures distribution home path.
 	 */
 	private static final Pattern JAR_PATH_PATTERN = Pattern.compile("^(.+)[\\\\/]bin[\\\\/].+\\.jar$");

@@ -21,8 +21,8 @@ class LocalArtifact implements IArtifact {
 	}
 
 	@Override
-	public int getLength() {
-		return (int) file.toFile().length();
+	public String getFileName() {
+		return files.getFileName(file);
 	}
 
 	@Override
@@ -33,6 +33,11 @@ class LocalArtifact implements IArtifact {
 	@Override
 	public String getExtension() {
 		return files.getExtension(file);
+	}
+
+	@Override
+	public int getLength() {
+		return (int) file.toFile().length();
 	}
 
 	@Override

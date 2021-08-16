@@ -9,7 +9,7 @@ public interface IPrintout {
 	void addHeading3(String heading);
 
 	void addParagraph(String paragraph);
-	
+
 	void createUnorderedList();
 
 	void createOrderedList();
@@ -26,5 +26,9 @@ public interface IPrintout {
 
 	void addTableRow(String value, String... values);
 
+	/**
+	 * Send current text to some sort of output device. Usually this method is called after printout text is complete but is
+	 * legal to display intermediate printout calling this method multiple times.
+	 */
 	void display();
 }

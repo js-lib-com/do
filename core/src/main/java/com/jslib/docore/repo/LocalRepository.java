@@ -64,7 +64,6 @@ class LocalRepository implements ILocalRepository {
 	 */
 	private void loadDependencies(RepositoryCoordinates coordinates, Set<RepositoryCoordinates> dependencies) throws IOException {
 		log.trace("loadDependencies(coordinates, dependencies)");
-		log.warn("Get dependencies for %s.", coordinates);
 		POM pom = getPOM(coordinates);
 		for (RepositoryCoordinates dependency : pom.getDependencies()) {
 			if (dependencies.contains(dependency)) {

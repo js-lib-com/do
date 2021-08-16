@@ -23,6 +23,13 @@ public interface IArtifact {
 	String getClassifier();
 
 	/**
+	 * Gets artifact file name including version, classifiers and extension.
+	 * 
+	 * @return artifact file name.
+	 */
+	String getFileName();
+
+	/**
 	 * Gets the file extension of this artifact, for example "jar" or "tar.gz". Returned value should have no leading dot and
 	 * should be never null or empty.
 	 * 
