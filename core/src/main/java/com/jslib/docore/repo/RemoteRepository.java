@@ -15,7 +15,7 @@ import js.log.Log;
 import js.log.LogFactory;
 import js.util.Params;
 
-public class RemoteRepository implements IRemoteRepository {
+class RemoteRepository implements IRemoteRepository {
 	private static final Log log = LogFactory.getLog(RemoteRepository.class);
 
 	private final URI repositoryURI;

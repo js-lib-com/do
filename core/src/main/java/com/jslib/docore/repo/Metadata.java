@@ -72,7 +72,7 @@ import com.jslib.docore.XMLFile;
  * 
  * @author Iulian Rotaru
  */
-public class Metadata extends XMLFile {
+class Metadata extends XMLFile {
 	/**
 	 * Load meta data from input stream.
 	 * 

@@ -14,7 +14,7 @@ import js.lang.Handler;
  * 
  * @author Iulian Rotaru
  */
-public class POM extends XMLFile {
+class POM extends XMLFile {
 	public POM(InputStream inputStream) {
 		super("project", inputStream);
 	}
@@ -47,24 +47,10 @@ public class POM extends XMLFile {
 	 * 
 	 * @return project dependencies list.
 	 */
-	public Iterable<RepositoryCoordinates> getDependencies() {
-		Handler<RepositoryCoordinates, Element> handler = (dependency) -> {
-			String scope = text(dependency, "scope");
-			if ("test".equals(scope) || "system".equals(scope)) {
-				return null;
-			}
+	public Iterable<Dependency> getDependencies() {
+		Handler<Dependency, Element> handler = (dependency) -> new Dependency(dependency);
 
-			// from maven documentation is not very clear if optional dependency can be ignored
-			// anyway, eclipse maven plugin does: on com.google.inject:guice:4.1.0 ignores asm and cglib
-			if ("true".equals(text(dependency, "optional"))) {
-				return null;
-			}
-
-			// at this point version can be null; it is handled on dependencies resolver
-			return new RepositoryCoordinates(text(dependency, "groupId"), text(dependency, "artifactId"), text(dependency, "version"));
-		};
-
-		List<RepositoryCoordinates> dependencies = new ArrayList<>();
+		List<Dependency> dependencies = new ArrayList<>();
 		dependencies.addAll(findByTagsPath("dependencies.dependency", handler));
 		dependencies.addAll(findByTagsPath("dependencyManagement.dependencies.dependency", handler));
 		return dependencies;

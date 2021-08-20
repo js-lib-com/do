@@ -7,6 +7,7 @@ import java.io.File;
 import js.converter.Converter;
 import js.converter.ConverterException;
 import js.util.Params;
+import js.util.Strings;
 
 /**
  * Address used to locate a project into a repository. Term <code>coordinate</code> is borrowed from Maven and has the same
@@ -135,7 +136,7 @@ public class RepositoryCoordinates implements Converter {
 
 	@Override
 	public String toString() {
-		return concat(groupId, ':', artifactId, ':', version);
+		return Strings.toString(groupId, artifactId, version);
 	}
 
 	@Override

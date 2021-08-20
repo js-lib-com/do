@@ -3,7 +3,7 @@ package com.jslib.docore.repo;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Packaging {
+class Packaging {
 	private final String value;
 
 	public Packaging(String value) {

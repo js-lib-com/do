@@ -1,10 +1,11 @@
 package com.jslib.docore.repo;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import com.jslib.docore.IFiles;
@@ -24,20 +25,23 @@ class LocalRepository implements ILocalRepository {
 	private final Path repositoryDir;
 	private final IFiles files;
 	private final IRemoteRepository remote;
+	private final IPOMLoader pomLoader;
 
 	@Inject
-	public LocalRepository(IProperties properties, IFiles files, IRemoteRepository remote) {
-		log.trace("ArtifactsRepository(properties, files, remote)");
+	public LocalRepository(IProperties properties, IFiles files, IRemoteRepository remote, IPOMLoader pomLoader) {
+		log.trace("LocalRepository(properties, files, remote, pomLoader)");
 
 		this.repositoryDir = properties.getProperty("repository.dir", Path.class);
 		this.files = files;
 		this.remote = remote;
+		this.pomLoader = pomLoader;
 	}
 
 	@Override
 	public IArtifact getMainArtifact(RepositoryCoordinates coordinates) throws IOException {
 		log.trace("getMainArtifact(coordinates)");
-		POM pom = getPOM(coordinates);
+
+		POM pom = pomLoader.getPOM(coordinates);
 		Path artifactDir = repositoryDir.resolve(coordinates.toFilePath());
 		// getPOM() create artifact directory if missing so we can safely use it here
 		Path artifactFile = artifactDir.resolve(coordinates.toFileName(pom.getPackaging().getExtention()));
@@ -47,9 +51,11 @@ class LocalRepository implements ILocalRepository {
 	@Override
 	public Iterable<RepositoryCoordinates> getDependencies(RepositoryCoordinates coordinates) throws IOException {
 		log.trace("getDependencies(coordinates)");
-		Set<RepositoryCoordinates> dependencies = new HashSet<>();
-		loadDependencies(coordinates, dependencies);
-		return dependencies;
+
+		Set<Dependency> dependencies = new HashSet<>();
+		Stack<Dependency> stack = new Stack<>();
+		loadDependencies(coordinates, dependencies, stack);
+		return dependencies.stream().map(dependency -> dependency.getCoordinates()).collect(Collectors.toSet());
 	}
 
 	/**
@@ -62,61 +68,46 @@ class LocalRepository implements ILocalRepository {
 	 * @param dependencies dependencies store.
 	 * @throws IOException if dependencies load fails.
 	 */
-	private void loadDependencies(RepositoryCoordinates coordinates, Set<RepositoryCoordinates> dependencies) throws IOException {
-		log.trace("loadDependencies(coordinates, dependencies)");
-		POM pom = getPOM(coordinates);
-		for (RepositoryCoordinates dependency : pom.getDependencies()) {
-			if (dependencies.contains(dependency)) {
+	void loadDependencies(RepositoryCoordinates coordinates, Set<Dependency> dependencies, Stack<Dependency> stack) throws IOException {
+		log.trace("loadDependencies(coordinates, dependencies, stack)");
+		POM pom = pomLoader.getPOM(coordinates);
+		for (Dependency dependency : pom.getDependencies()) {
+			if (stack.contains(dependency)) {
 				continue;
 			}
+
+			if (dependency.getScope() == Scope.TEST || dependency.getScope() == Scope.SYSTEM) {
+				continue;
+			}
+
+			// from maven documentation is not very clear if optional dependency can be ignored
+			// anyway, eclipse maven plugin does: e.g. on com.google.inject:guice:4.1.0 ignores asm and cglib
+			if (dependency.isOptional()) {
+				continue;
+			}
+
+			// resolve variables and missing version on current dependency
 			if (dependency.hasVariables()) {
 				dependency = resolveVariables(pom, dependency);
 			}
 			if (!dependency.hasVersion()) {
 				dependency = resolveMissingVersion(dependency);
 			}
-			log.info("Load dependency %s.", dependency);
-			if (dependencies.add(dependency)) {
-				loadDependencies(dependency, dependencies);
-			}
-		}
-	}
 
-	/**
-	 * Load POM from local repository. If local project directory is missing download project files from remote repository. If
-	 * download fails returns an empty POM instance.
-	 * 
-	 * @param coordinates project repository coordinates,
-	 * @return POM instance, possible empty.
-	 * @throws IOException if POM instance loading fails.
-	 */
-	private POM getPOM(RepositoryCoordinates coordinates) throws IOException {
-		log.trace("getPOM(coordinates)");
-		Path projectDir = repositoryDir.resolve(coordinates.toFilePath());
-		if (!files.exists(projectDir)) {
-			projectDir = downloadArtifactDir(coordinates, projectDir);
-		}
-		return new POM(files.getInputStream(projectDir.resolve(coordinates.toFileName("pom"))));
-	}
+			stack.push(dependency);
 
-	/**
-	 * Download remote project files to project directory from local repository. This method downloads all files returned by
-	 * {@link IRemoteRepository#getProjectFiles(RepositoryCoordinates)}. Given local directory path should exist; existing files
-	 * are overwritten.
-	 * 
-	 * @param coordinates repository coordinates for remote project,
-	 * @param projectDir existing local project directory.
-	 * @return for caller convenience return project directory parameter.
-	 * @throws IOException if remote file download fails.
-	 */
-	private Path downloadArtifactDir(RepositoryCoordinates coordinates, Path projectDir) throws IOException {
-		log.trace("downloadArtifactDir(coordinates, artifactDir)");
-		for (IRemoteFile file : remote.getProjectFiles(coordinates)) {
-			try (InputStream inputStream = file.getInputStream()) {
-				files.copy(inputStream, projectDir.resolve(file.getName()));
+			// process child dependencies for import dependency but do not add itself to dependencies set
+			if (dependency.isImport()) {
+				loadDependencies(dependency.getCoordinates(), dependencies, stack);
+			} else {
+				log.info("Load dependency %s.", dependency);
+				if (dependencies.add(dependency)) {
+					loadDependencies(dependency.getCoordinates(), dependencies, stack);
+				}
 			}
+
+			stack.pop();
 		}
-		return projectDir;
 	}
 
 	/**
@@ -124,16 +115,16 @@ class LocalRepository implements ILocalRepository {
 	 * {@link IRemoteRepository#getReleaseVersion(String, String)}. Note that returned coordinates may still have null version
 	 * if remote repository meta data is missing.
 	 * 
-	 * @param coordinates repository coordinates with missing version.
+	 * @param dependency repository coordinates with missing version.
 	 * @return new repository coordinates with version initialized from remote repository.
 	 * @throws IOException if remote repository read fails.
 	 */
-	private RepositoryCoordinates resolveMissingVersion(RepositoryCoordinates coordinates) throws IOException {
+	Dependency resolveMissingVersion(Dependency dependency) throws IOException {
 		log.trace("resolveMissingVersion(coordinates)");
-		log.debug("coordinates=%s", coordinates);
-		final String groupId = coordinates.getGroupId();
-		final String artifactId = coordinates.getArtifactId();
-		return new RepositoryCoordinates(groupId, artifactId, remote.getReleaseVersion(groupId, artifactId));
+
+		final String groupId = dependency.getGroupId();
+		final String artifactId = dependency.getArtifactId();
+		return new Dependency(groupId, artifactId, remote.getReleaseVersion(groupId, artifactId));
 	}
 
 	/**
@@ -142,31 +133,32 @@ class LocalRepository implements ILocalRepository {
 	 * component is initialized to null.
 	 * 
 	 * @param pom project descriptor,
-	 * @param coordinates repository coordinates with variables.
+	 * @param dependency repository coordinates with variables.
 	 * @return new repository coordinates with variables resolved or null.
 	 * @throws IOException if parent POM loading fails.
 	 */
-	private RepositoryCoordinates resolveVariables(POM pom, RepositoryCoordinates coordinates) throws IOException {
+	Dependency resolveVariables(POM pom, Dependency dependency) throws IOException {
 		log.trace("resolveVariables(pom, coordinates)");
-		log.debug("coordinates=%s", coordinates);
 
-		String groupId = coordinates.getGroupId();
-		if (coordinates.isGroupVariable()) {
+		String groupId = dependency.getGroupId();
+		if (dependency.isGroupVariable()) {
 			groupId = resolveVariable(pom, groupId);
 		}
 
-		String artifactId = coordinates.getArtifactId();
-		if (coordinates.isArtifactVariable()) {
+		String artifactId = dependency.getArtifactId();
+		if (dependency.isArtifactVariable()) {
 			artifactId = resolveVariable(pom, artifactId);
 		}
 
-		String version = coordinates.getVersion();
-		if (coordinates.isVersionVariable()) {
+		String version = dependency.getVersion();
+		if (dependency.isVersionVariable()) {
 			version = resolveVariable(pom, version);
 		}
 
-		return new RepositoryCoordinates(groupId, artifactId, version);
+		return new Dependency(groupId, artifactId, version);
 	}
+
+	private static final String PROJECT_PREFIX = "project.";
 
 	/**
 	 * Try to recursively resolve variable on given POM and its ancestors. Attempt to find an element with tags path described
@@ -188,17 +180,15 @@ class LocalRepository implements ILocalRepository {
 	 * @return variable value or null if not found.
 	 * @throws IOException if parent POM loading fails.
 	 */
-	private String resolveVariable(POM pom, String variable) throws IOException {
+	String resolveVariable(POM pom, String variable) throws IOException {
 		log.trace("getProperty(pom, variable)");
-		log.debug("variable=%s", variable);
 
 		final String elementRef = variable.substring(2, variable.length() - 1); // remove dollar-curly-braces
-		final String projectPrefix = "project.";
 
 		String property = null;
-		if (elementRef.startsWith(projectPrefix)) {
+		if (elementRef.startsWith(PROJECT_PREFIX)) {
 			// remove 'project' prefix and convert dots tags path to tag names array
-			String[] args = elementRef.substring(projectPrefix.length()).split("\\.");
+			String[] args = elementRef.substring(PROJECT_PREFIX.length()).split("\\.");
 			property = pom.property(args);
 		}
 		// if element reference is not a tags path it should be a property under 'properties'
@@ -218,6 +208,6 @@ class LocalRepository implements ILocalRepository {
 		if (parent == null) {
 			return null;
 		}
-		return resolveVariable(getPOM(parent), variable);
+		return resolveVariable(pomLoader.getPOM(parent), variable);
 	}
 }
