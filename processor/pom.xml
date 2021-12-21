@@ -5,15 +5,15 @@
 	<parent>
 		<groupId>com.js-lib.do</groupId>
 		<artifactId>do-pom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>do-processor</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>com.js-lib.do</groupId>
 			<artifactId>do-spi</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -4,26 +4,63 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.js-lib.do</groupId>
-		<version>0.0.1-SNAPSHOT</version>
 		<artifactId>do-pom</artifactId>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>do-assembly</artifactId>
+	<packaging>pom</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>com.js-lib.do</groupId>
 			<artifactId>do-cli</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>com.js-lib.do</groupId>
 			<artifactId>do-tasks</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<configuration>
+					<skipSource>true</skipSource>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-dependencies-list</id>
+						<phase>package</phase>
+						<goals>
+							<goal>collect</goal>
+						</goals>
+						<configuration>
+							<includeScope>runtime</includeScope>
+							<excludeArtifactIds>do-cli,do-update</excludeArtifactIds>
+							<outputFile>target/do.dependencies</outputFile>
+							<sort>true</sort>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
