@@ -53,7 +53,7 @@ public class TasksRegistryTest {
 
 	@Before
 	public void beforeTest() throws Exception {
-		Home.setPath("src/test/resources/");
+		System.setProperty("HOME_DIR", "src/test/resources/");
 		registry = new TasksRegistry();
 		registry._load(JSON);
 	}

@@ -1,5 +1,6 @@
 package com.jslib.docore.repo;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -30,7 +31,6 @@ class RemoteRepository implements IRemoteRepository {
 	public Iterable<IRemoteFile> getProjectFiles(RepositoryCoordinates coordinates) throws IOException {
 		log.trace("getProjectFiles(coordinates)");
 
-		log.debug("repositoryURI=%s", repositoryURI);
 		URI projectURI = repositoryURI.resolve(coordinates.toURLPath());
 		log.debug("projectURI=%s", projectURI);
 
@@ -54,6 +54,22 @@ class RemoteRepository implements IRemoteRepository {
 		}
 
 		return files;
+	}
+
+	@Override
+	public IRemoteFile getProjectFile(RepositoryCoordinates coordinates, String extension) throws FileNotFoundException, IOException {
+		URI projectURI = repositoryURI.resolve(coordinates.toURLPath());
+		log.debug("projectURI=%s", projectURI);
+
+		// meta data is used only if build is a snapshot
+		Metadata meta = null;
+		if (coordinates.isSnapshot()) {
+			meta = new Metadata(new DownloadStream(projectURI.resolve("maven-metadata.xml")));
+		}
+
+		log.debug("coordinates.toSnapshotFileName()=%s", coordinates.toSnapshotFileName(meta, extension));
+		URI fileURI = projectURI.resolve(coordinates.toSnapshotFileName(meta, extension));
+		return new RemoteFile(fileURI, coordinates.toFileName(extension));
 	}
 
 	@Override

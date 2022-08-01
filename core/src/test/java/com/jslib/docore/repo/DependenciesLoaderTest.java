@@ -32,7 +32,7 @@ public class DependenciesLoaderTest {
 	@Mock
 	private IRemoteRepository remote;
 	@Mock
-	private IPOMLoader pomLoader;
+	private IRepositoryLoader pomLoader;
 
 	@Mock
 	private POM pom;
@@ -50,7 +50,7 @@ public class DependenciesLoaderTest {
 
 	@Before
 	public void beforeTest() throws IOException {
-		repository = new LocalRepository(properties, files, remote, pomLoader);
+		repository = new LocalRepository(files, remote, pomLoader);
 		stack = new Stack<>();
 	}
 

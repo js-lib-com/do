@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.jslib.docli.CLI;
@@ -146,7 +147,7 @@ class ScriptInterpreter implements ITask {
 		@Override
 		public Iterable<IParameterDefinition<?>> definitions() {
 			// TODO Auto-generated method stub
-			return null;
+			return Collections.emptyList();
 		}
 
 		@Override

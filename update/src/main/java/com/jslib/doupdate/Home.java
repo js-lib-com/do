@@ -16,10 +16,11 @@ class Home {
 	public static void setMainClass(Class<?> mainClass) {
 		File jarFile = new File(mainClass.getProtectionDomain().getCodeSource().getLocation().getPath());
 		Matcher matcher = JAR_PATH_PATTERN.matcher(jarFile.getAbsolutePath());
-		if (!matcher.find()) {
-			throw new IllegalStateException("Invalid jar file pattern.");
+		if (matcher.find()) {
+			path = new File(matcher.group(1));
+		} else {
+			path = new File(System.getProperty("HOME_DIR"));
 		}
-		path = new File(matcher.group(1));
 	}
 
 	public static File getPath() {

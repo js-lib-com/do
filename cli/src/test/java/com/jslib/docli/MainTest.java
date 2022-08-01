@@ -21,7 +21,7 @@ import com.jslib.dospi.ReturnCode;
 public class MainTest {
 	@BeforeClass
 	public static void beforeClass() {
-		Home.setPath("src/test/resources/");
+		System.setProperty("HOME_DIR", "src/test/resources/");
 	}
 
 	@Mock

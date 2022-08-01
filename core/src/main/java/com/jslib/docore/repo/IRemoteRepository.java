@@ -1,5 +1,6 @@
 package com.jslib.docore.repo;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -44,6 +45,8 @@ public interface IRemoteRepository {
 	 */
 	Iterable<IRemoteFile> getProjectFiles(RepositoryCoordinates coordinates) throws IOException;
 
+	IRemoteFile getProjectFile(RepositoryCoordinates coordinates, String extension) throws FileNotFoundException, IOException;
+	
 	/**
 	 * Attempt to load artifact release version from repository meta data. Implementation could assume that repository keeps a
 	 * meta data file named <code>maven-metadata.xml</code> on artifact directory. Meta data file contains information about

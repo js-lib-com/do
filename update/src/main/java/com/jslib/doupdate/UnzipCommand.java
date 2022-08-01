@@ -30,7 +30,7 @@ import java.util.zip.ZipInputStream;
 class UnzipCommand implements ICommand {
 	@Override
 	public void exec(List<String> args) throws Exception {
-		if (args.size() == 3 || args.size() == 6) {
+		if (args.size() != 3 && args.size() != 6) {
 			throw new IllegalArgumentException("Bad arguments count.");
 		}
 		if (!args.get(1).equals("to")) {
@@ -45,8 +45,8 @@ class UnzipCommand implements ICommand {
 			mergeProperties = true;
 		}
 
-		File zipFile = Home.getFile(args.get(0));
-		File targetDir = Home.getFile(args.get(2));
+		File zipFile = new File(args.get(0));
+		File targetDir = new File(args.get(2));
 
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
 			ZipEntry zipEntry;

@@ -50,6 +50,7 @@ public class CLI implements IShell, IProperties {
 	private final Console console;
 	private final IProcessorFactory processorFactory;
 	private final TasksRegistry registry;
+	private final Properties properties;
 
 	@Inject
 	public CLI(Console console) {
@@ -58,6 +59,15 @@ public class CLI implements IShell, IProperties {
 		this.console = console;
 		this.processorFactory = new CliProcessorFactory(this);
 		this.registry = new TasksRegistry();
+
+		this.properties = new Properties();
+		Path binDir = Paths.get(Home.getPath()).resolve("bin");
+		Path propertiesFile = binDir.resolve("do.properties");
+		try (Reader reader = Files.newBufferedReader(propertiesFile)) {
+			properties.load(reader);
+		} catch (IOException e) {
+			log.error(e);
+		}
 	}
 
 	@Override
@@ -247,23 +257,8 @@ public class CLI implements IShell, IProperties {
 		console.println("Do CLI - 0.0.1-SNAPSHOT");
 	}
 
-	private final Properties properties = new Properties();
-
 	@Override
 	public <T> T getProperty(String key, Class<T> type) {
-		if (properties.isEmpty()) {
-			synchronized (properties) {
-				if (properties.isEmpty()) {
-					Path binDir = Paths.get(Home.getPath()).resolve("bin");
-					Path propertiesFile = binDir.resolve("do.properties");
-					try (Reader reader = Files.newBufferedReader(propertiesFile)) {
-						properties.load(reader);
-					} catch (IOException e) {
-						log.error(e);
-					}
-				}
-			}
-		}
 		return converter.asObject(properties.getProperty(key), type);
 	}
 

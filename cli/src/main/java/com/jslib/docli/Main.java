@@ -16,7 +16,6 @@ public class Main {
 	private static final Log log = LogFactory.getLog(Main.class);
 
 	public static void main(String... args) {
-		Home.setMainClass(Main.class);
 		AnsiConsole.systemInstall();
 		Logging.configure(args);
 		log.trace("main(String...)");

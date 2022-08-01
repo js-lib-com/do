@@ -50,6 +50,8 @@ public class ImportProviderTest {
 
 	@Before
 	public void beforeTest() throws IOException {
+		System.setProperty("HOME_DIR", "src/test/resources/");
+
 		when(shell.getConsole()).thenReturn(console);
 		when(shell.getHomeDir()).thenReturn(homeDir);
 		when(homeDir.resolve("lib")).thenReturn(libDir);

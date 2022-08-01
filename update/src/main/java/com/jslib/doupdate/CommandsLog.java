@@ -29,6 +29,7 @@ class CommandsLog implements ICommandsLog, Iterable<String> {
 	}
 
 	public void save() throws IOException {
+		System.out.println("---- Write commands log on file " + file());
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file()))) {
 			for (String command : commands) {
 				writer.append(command);

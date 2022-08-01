@@ -21,6 +21,11 @@ class LocalArtifact implements IArtifact {
 	}
 
 	@Override
+	public Path getPath() {
+		return file.toAbsolutePath();
+	}
+
+	@Override
 	public String getFileName() {
 		return files.getFileName(file);
 	}

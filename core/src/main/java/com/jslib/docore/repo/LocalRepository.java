@@ -1,5 +1,6 @@
 package com.jslib.docore.repo;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -9,7 +10,6 @@ import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 import com.jslib.docore.IFiles;
-import com.jslib.docore.IProperties;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -22,30 +22,34 @@ import js.log.LogFactory;
 class LocalRepository implements ILocalRepository {
 	private static final Log log = LogFactory.getLog(LocalRepository.class);
 
-	private final Path repositoryDir;
 	private final IFiles files;
 	private final IRemoteRepository remote;
-	private final IPOMLoader pomLoader;
+	private final IRepositoryLoader loader;
 
 	@Inject
-	public LocalRepository(IProperties properties, IFiles files, IRemoteRepository remote, IPOMLoader pomLoader) {
-		log.trace("LocalRepository(properties, files, remote, pomLoader)");
-
-		this.repositoryDir = properties.getProperty("repository.dir", Path.class);
+	public LocalRepository(IFiles files, IRemoteRepository remote, IRepositoryLoader loader) {
+		log.trace("LocalRepository(files, remote, pomLoader)");
 		this.files = files;
 		this.remote = remote;
-		this.pomLoader = pomLoader;
+		this.loader = loader;
+	}
+
+	@Override
+	public IArtifact getArtifact(RepositoryCoordinates coordinates, String extension) throws FileNotFoundException, IOException {
+		log.trace("getArtifact(coordinates, extension)");
+		Path projectDir = loader.getProjectDir(coordinates);
+		Path artifactFile = projectDir.resolve(coordinates.toFileName(extension));
+		if (!files.exists(artifactFile)) {
+			artifactFile = loader.getProjectFile(coordinates, extension);
+		}
+		return new LocalArtifact(files, artifactFile);
 	}
 
 	@Override
 	public IArtifact getMainArtifact(RepositoryCoordinates coordinates) throws IOException {
 		log.trace("getMainArtifact(coordinates)");
-
-		POM pom = pomLoader.getPOM(coordinates);
-		Path artifactDir = repositoryDir.resolve(coordinates.toFilePath());
-		// getPOM() create artifact directory if missing so we can safely use it here
-		Path artifactFile = artifactDir.resolve(coordinates.toFileName(pom.getPackaging().getExtention()));
-		return new LocalArtifact(files, artifactFile);
+		POM pom = loader.getPOM(coordinates);
+		return getArtifact(coordinates, pom.getPackaging().getExtention());
 	}
 
 	@Override
@@ -70,7 +74,7 @@ class LocalRepository implements ILocalRepository {
 	 */
 	void loadDependencies(RepositoryCoordinates coordinates, Set<Dependency> dependencies, Stack<Dependency> stack) throws IOException {
 		log.trace("loadDependencies(coordinates, dependencies, stack)");
-		POM pom = pomLoader.getPOM(coordinates);
+		POM pom = loader.getPOM(coordinates);
 		for (Dependency dependency : pom.getDependencies()) {
 			if (stack.contains(dependency)) {
 				continue;
@@ -208,6 +212,6 @@ class LocalRepository implements ILocalRepository {
 		if (parent == null) {
 			return null;
 		}
-		return resolveVariable(pomLoader.getPOM(parent), variable);
+		return resolveVariable(loader.getPOM(parent), variable);
 	}
 }

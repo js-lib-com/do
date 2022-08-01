@@ -2,6 +2,7 @@ package com.jslib.docore.repo;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 /**
  * Project artifact, stored on a repository. Beside the POM and snapshot meta data, a project has a main artifact and couple of
@@ -14,6 +15,8 @@ import java.io.InputStream;
  */
 public interface IArtifact {
 
+	Path getPath();
+	
 	/**
 	 * Gets the classifier of this artifact, for example "sources". Classifier is used only for secondary artifacts; this method
 	 * returns null if this artifact is the main one.

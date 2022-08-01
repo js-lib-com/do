@@ -13,19 +13,39 @@ import com.jslib.docore.IProperties;
 import js.log.Log;
 import js.log.LogFactory;
 
-public class POMLoader implements IPOMLoader {
-	private static final Log log = LogFactory.getLog(POMLoader.class);
+public class RepositoryLoader implements IRepositoryLoader {
+	private static final Log log = LogFactory.getLog(RepositoryLoader.class);
 
 	private final Path repositoryDir;
 	private final IRemoteRepository remote;
 	private final IFiles files;
 
 	@Inject
-	public POMLoader(IProperties properties, IRemoteRepository remote, IFiles files) {
-		log.trace("POMLoader(properties, remote, files)");
+	public RepositoryLoader(IProperties properties, IRemoteRepository remote, IFiles files) {
+		log.trace("RepositoryLoader(properties, remote, files)");
 		this.repositoryDir = properties.getProperty("repository.dir", Path.class);
 		this.remote = remote;
 		this.files = files;
+	}
+
+	@Override
+	public Path getProjectDir(RepositoryCoordinates coordinates) throws IOException {
+		Path projectDir = repositoryDir.resolve(coordinates.toFilePath());
+		if (!files.exists(projectDir)) {
+			projectDir = downloadProjectDir(coordinates, projectDir);
+		}
+		return projectDir;
+	}
+
+	@Override
+	public Path getProjectFile(RepositoryCoordinates coordinates, String extension) throws FileNotFoundException, IOException {
+		Path projectDir = getProjectDir(coordinates);
+		Path projectFile = projectDir.resolve(coordinates.toFileName(extension));
+		if (!files.exists(projectFile)) {
+			IRemoteFile remoteFile = remote.getProjectFile(coordinates, extension);
+			files.copy(remoteFile.getInputStream(), projectFile);
+		}
+		return projectFile;
 	}
 
 	/**
@@ -39,10 +59,7 @@ public class POMLoader implements IPOMLoader {
 	@Override
 	public POM getPOM(RepositoryCoordinates coordinates) throws FileNotFoundException, IOException {
 		log.trace("getPOM(coordinates)");
-		Path projectDir = repositoryDir.resolve(coordinates.toFilePath());
-		if (!files.exists(projectDir)) {
-			projectDir = downloadArtifactDir(coordinates, projectDir);
-		}
+		Path projectDir = getProjectDir(coordinates);
 		Path pomFile = projectDir.resolve(coordinates.toFileName("pom"));
 		if (!files.exists(pomFile)) {
 			throw new FileNotFoundException(pomFile.toString());
@@ -60,7 +77,7 @@ public class POMLoader implements IPOMLoader {
 	 * @return for caller convenience return project directory parameter.
 	 * @throws IOException if remote file download fails.
 	 */
-	private Path downloadArtifactDir(RepositoryCoordinates coordinates, Path projectDir) throws IOException {
+	private Path downloadProjectDir(RepositoryCoordinates coordinates, Path projectDir) throws IOException {
 		log.trace("downloadArtifactDir(coordinates, artifactDir)");
 		for (IRemoteFile file : remote.getProjectFiles(coordinates)) {
 			try (InputStream inputStream = file.getInputStream()) {

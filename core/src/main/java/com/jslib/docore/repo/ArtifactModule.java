@@ -23,6 +23,6 @@ public class ArtifactModule extends AbstractModule {
 
 		bind(ILocalRepository.class).to(LocalRepository.class);
 		bind(IRemoteRepository.class).to(RemoteRepository.class);
-		bind(IPOMLoader.class).to(POMLoader.class);
+		bind(IRepositoryLoader.class).to(RepositoryLoader.class);
 	}
 }
