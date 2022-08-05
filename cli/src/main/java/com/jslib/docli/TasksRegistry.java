@@ -16,15 +16,14 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.jslib.dospi.TaskReference;
+import com.jslib.api.json.Json;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.dospi.ITasksProvider;
-
-import js.json.Json;
-import js.lang.Callback;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Classes;
-import js.util.Params;
+import com.jslib.dospi.TaskReference;
+import com.jslib.lang.Callback;
+import com.jslib.util.Classes;
+import com.jslib.util.Params;
 
 public class TasksRegistry {
 	private static final Log log = LogFactory.getLog(TasksRegistry.class);

@@ -2,8 +2,8 @@ package com.jslib.docli;
 
 import org.junit.Test;
 
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 public class LoggingTest {
 	@Test

@@ -12,6 +12,11 @@ import java.util.SortedSet;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterException;
+import com.jslib.converter.ConverterRegistry;
 import com.jslib.docli.script.ScriptProcessor;
 import com.jslib.docore.IProgress;
 import com.jslib.docore.IProperties;
@@ -31,14 +36,8 @@ import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskAbortException;
 import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.UserCancelException;
-
-import js.converter.Converter;
-import js.converter.ConverterException;
-import js.converter.ConverterRegistry;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
-import js.util.Types;
+import com.jslib.util.Strings;
+import com.jslib.util.Types;
 
 @Singleton
 public class CLI implements IShell, IProperties {

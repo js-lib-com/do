@@ -1,12 +1,11 @@
 package com.jslib.dotasks;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docli.TasksRegistry;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskReference;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class DefineTask extends DoTask {
 	private static final Log log = LogFactory.getLog(DefineTask.class);

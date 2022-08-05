@@ -9,10 +9,9 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IFiles;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 /**
  * Implementation for local repository services.

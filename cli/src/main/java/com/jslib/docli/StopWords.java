@@ -10,11 +10,11 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import js.json.Json;
-import js.lang.GType;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Classes;
+import com.jslib.api.json.Json;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.lang.GType;
+import com.jslib.util.Classes;
 
 class StopWords implements IStopWords {
 	private static final Log log = LogFactory.getLog(StopWords.class);

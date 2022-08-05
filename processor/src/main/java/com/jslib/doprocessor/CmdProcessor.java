@@ -1,11 +1,10 @@
 package com.jslib.doprocessor;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ReturnCode;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 class CmdProcessor extends Processor {
 	private static final Log log = LogFactory.getLog(CmdProcessor.class);

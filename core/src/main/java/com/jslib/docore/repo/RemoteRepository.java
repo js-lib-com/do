@@ -9,12 +9,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.DownloadStream;
 import com.jslib.docore.IProperties;
-
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Params;
+import com.jslib.util.Params;
 
 class RemoteRepository implements IRemoteRepository {
 	private static final Log log = LogFactory.getLog(RemoteRepository.class);

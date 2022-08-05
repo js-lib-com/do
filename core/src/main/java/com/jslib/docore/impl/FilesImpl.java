@@ -34,14 +34,13 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IFiles;
 import com.jslib.docore.IProgress;
-
-import js.lang.BugError;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Params;
-import js.util.Strings;
+import com.jslib.lang.BugError;
+import com.jslib.util.Params;
+import com.jslib.util.Strings;
 
 @Singleton
 class FilesImpl implements IFiles {

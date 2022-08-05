@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 class Parameters implements IParameters {
 	private final int NO_PARAMETER_POSITION = -1;

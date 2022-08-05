@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IFiles;
 import com.jslib.docore.repo.IArtifact;
 import com.jslib.docore.repo.ILocalRepository;
@@ -28,10 +30,7 @@ import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskAbortException;
 import com.jslib.doupdate.ICommandsLog;
 import com.jslib.doupdate.Updater;
-
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public class ImportProvider extends DoTask {
 	private static final Log log = LogFactory.getLog(ImportProvider.class);

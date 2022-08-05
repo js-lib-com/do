@@ -1,9 +1,8 @@
 package com.jslib.docore.repo;
 
 import com.google.inject.AbstractModule;
-
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 /**
  * Module for Guice dependency injection.

@@ -7,8 +7,7 @@ import java.io.InputStreamReader;
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IFormatter;
 import com.jslib.dospi.UserCancelException;
-
-import js.lang.BugError;
+import com.jslib.lang.BugError;
 
 public class Console implements IConsole {
 	private static final BufferedReader STDIN = new BufferedReader(new InputStreamReader(System.in));

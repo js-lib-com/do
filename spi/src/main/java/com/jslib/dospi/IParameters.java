@@ -2,8 +2,6 @@ package com.jslib.dospi;
 
 import java.util.List;
 
-import js.util.Strings;
-
 /**
  * Task parameters are defined by task implementation, values are updated by user via shell and consumed on task execution.
  * There are two kinds of parameters: positional or named. A positional parameter is usually provided by user as argument in

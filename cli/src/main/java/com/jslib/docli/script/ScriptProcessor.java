@@ -3,16 +3,15 @@ package com.jslib.docli.script;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docli.CLI;
 import com.jslib.docli.Home;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.ITask;
-import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
-
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.dospi.TaskReference;
 
 public class ScriptProcessor implements IProcessor {
 	private static final Log log = LogFactory.getLog(ScriptProcessor.class);

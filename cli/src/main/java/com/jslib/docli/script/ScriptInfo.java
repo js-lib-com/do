@@ -6,8 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.jslib.dospi.ITaskInfo;
-
-import js.lang.BugError;
+import com.jslib.lang.BugError;
 
 class ScriptInfo implements ITaskInfo {
 	private static final Pattern INFO_LINE_PATTERN = Pattern.compile("^((?:[A-Z][a-z]+ )+[A-Z][a-z]+) \\- ver\\. ([^,]+), ([^\\.]+)\\.$");

@@ -20,9 +20,9 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.velocity.VelocityContext;
 
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.util.Strings;
 
 public class TemplateProcessor {
 	private static final Log log = LogFactory.getLog(TemplateProcessor.class);

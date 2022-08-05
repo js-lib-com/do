@@ -2,14 +2,13 @@ package com.jslib.dotasks;
 
 import javax.inject.Inject;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docli.TasksRegistry;
 import com.jslib.dospi.IConsole;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ReturnCode;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class DeleteTask extends DoTask {
 	private static final Log log = LogFactory.getLog(DeleteTask.class);

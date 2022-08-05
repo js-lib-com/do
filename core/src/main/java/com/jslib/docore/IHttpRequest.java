@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 import org.xml.sax.SAXException;
 
-import js.dom.Document;
+import com.jslib.api.dom.Document;
 
 public interface IHttpRequest {
 

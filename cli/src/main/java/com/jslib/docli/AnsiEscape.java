@@ -1,6 +1,6 @@
 package com.jslib.docli;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public enum AnsiEscape {
 	BOLD(1), ITALIC(3), UNDERLINE(4), REVERSE(7), STRIKE(9), // font styles

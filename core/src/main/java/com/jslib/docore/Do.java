@@ -6,11 +6,10 @@ import java.util.List;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.impl.CoreModule;
 import com.jslib.docore.repo.ArtifactModule;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public final class Do {
 	private static final Log log = LogFactory.getLog(Do.class);

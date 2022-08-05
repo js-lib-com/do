@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public class Updater {
 	private final Path jarFile;

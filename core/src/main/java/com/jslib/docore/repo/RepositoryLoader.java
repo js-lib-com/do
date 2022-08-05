@@ -7,11 +7,10 @@ import java.nio.file.Path;
 
 import javax.inject.Inject;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IFiles;
 import com.jslib.docore.IProperties;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class RepositoryLoader implements IRepositoryLoader {
 	private static final Log log = LogFactory.getLog(RepositoryLoader.class);

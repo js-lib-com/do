@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docli.CLI;
 import com.jslib.docli.Statement;
 import com.jslib.dospi.Flags;
@@ -16,9 +18,6 @@ import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
 import com.jslib.dospi.ReturnCode;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 class ScriptInterpreter implements ITask {
 	private static final Log log = LogFactory.getLog(ScriptInterpreter.class);

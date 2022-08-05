@@ -21,13 +21,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.xml.sax.SAXException;
 
+import com.jslib.api.dom.Document;
+import com.jslib.api.dom.DocumentBuilder;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IHttpRequest;
 import com.jslib.docore.IProgress;
-
-import js.dom.Document;
-import js.dom.DocumentBuilder;
-import js.log.Log;
-import js.log.LogFactory;
 
 @Singleton
 class HttpRequest implements IHttpRequest {

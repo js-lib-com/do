@@ -4,8 +4,8 @@ package com.jslib.docore.repo;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.dom.Element;
-import js.util.Strings;
+import com.jslib.api.dom.Element;
+import com.jslib.util.Strings;
 
 class Dependency {
 	private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";

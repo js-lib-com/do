@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.util.Strings;
 
 /**
  * A statement is initialized form command line arguments and has a command and optional positional parameters. There are also

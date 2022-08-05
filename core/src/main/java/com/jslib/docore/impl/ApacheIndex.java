@@ -17,15 +17,14 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.xml.sax.SAXException;
 
+import com.jslib.api.dom.Document;
+import com.jslib.api.dom.Element;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IApacheIndex;
 import com.jslib.docore.IHttpFile;
 import com.jslib.docore.IHttpRequest;
 import com.jslib.docore.IProgress;
-
-import js.dom.Document;
-import js.dom.Element;
-import js.log.Log;
-import js.log.LogFactory;
 
 @Singleton
 class ApacheIndex implements IApacheIndex {

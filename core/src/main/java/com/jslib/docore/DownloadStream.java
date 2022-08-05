@@ -16,8 +16,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 public class DownloadStream extends InputStream {
 	private static final Log log = LogFactory.getLog(DownloadStream.class);

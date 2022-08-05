@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.TaskReference;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class TasksProvider implements ITasksProvider {
 	private static final Log log = LogFactory.getLog(TasksProvider.class);

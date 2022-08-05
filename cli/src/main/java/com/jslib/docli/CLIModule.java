@@ -3,13 +3,12 @@ package com.jslib.docli;
 import java.util.ServiceLoader;
 
 import com.google.inject.AbstractModule;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IProperties;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITasksProvider;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class CLIModule extends AbstractModule {
 	private static final Log log = LogFactory.getLog(CLIModule.class);

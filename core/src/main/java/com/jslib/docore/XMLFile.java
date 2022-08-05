@@ -8,14 +8,14 @@ import java.util.List;
 
 import javax.xml.xpath.XPathExpressionException;
 
-import js.dom.Document;
-import js.dom.DocumentBuilder;
-import js.dom.Element;
-import js.lang.BugError;
-import js.lang.Handler;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Classes;
+import com.jslib.api.dom.Document;
+import com.jslib.api.dom.DocumentBuilder;
+import com.jslib.api.dom.Element;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.lang.BugError;
+import com.jslib.lang.Handler;
+import com.jslib.util.Classes;
 
 public abstract class XMLFile {
 	private static final Log log = LogFactory.getLog(XMLFile.class);

@@ -1,13 +1,13 @@
 package com.jslib.docore.repo;
 
-import static js.util.Strings.concat;
+import static com.jslib.util.Strings.concat;
 
 import java.io.File;
 
-import js.converter.Converter;
-import js.converter.ConverterException;
-import js.util.Params;
-import js.util.Strings;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterException;
+import com.jslib.util.Params;
+import com.jslib.util.Strings;
 
 /**
  * Address used to locate a project into a repository. Term <code>coordinate</code> is borrowed from Maven and has the same

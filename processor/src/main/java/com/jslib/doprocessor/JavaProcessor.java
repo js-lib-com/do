@@ -1,15 +1,14 @@
 package com.jslib.doprocessor;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docore.Do;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskReference;
-
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Classes;
+import com.jslib.util.Classes;
 
 class JavaProcessor implements IProcessor {
 	private static final Log log = LogFactory.getLog(JavaProcessor.class);

@@ -4,10 +4,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jslib.api.dom.Element;
 import com.jslib.docore.XMLFile;
-
-import js.dom.Element;
-import js.lang.Handler;
+import com.jslib.lang.Handler;
 
 /**
  * Project descriptor, aka POM.
