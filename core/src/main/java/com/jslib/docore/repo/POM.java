@@ -3,10 +3,10 @@ package com.jslib.docore.repo;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import com.jslib.api.dom.Element;
 import com.jslib.docore.XMLFile;
-import com.jslib.lang.Handler;
 
 /**
  * Project descriptor, aka POM.
@@ -47,7 +47,7 @@ class POM extends XMLFile {
 	 * @return project dependencies list.
 	 */
 	public Iterable<Dependency> getDependencies() {
-		Handler<Dependency, Element> handler = (dependency) -> new Dependency(dependency);
+		Function<Element, Dependency> handler = (dependency) -> new Dependency(dependency);
 
 		List<Dependency> dependencies = new ArrayList<>();
 		dependencies.addAll(findByTagsPath("dependencies.dependency", handler));

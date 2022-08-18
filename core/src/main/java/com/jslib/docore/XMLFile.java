@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.xml.xpath.XPathExpressionException;
 
@@ -14,7 +15,6 @@ import com.jslib.api.dom.Element;
 import com.jslib.api.log.Log;
 import com.jslib.api.log.LogFactory;
 import com.jslib.lang.BugError;
-import com.jslib.lang.Handler;
 import com.jslib.util.Classes;
 
 public abstract class XMLFile {
@@ -63,15 +63,15 @@ public abstract class XMLFile {
 		return element.getText().trim();
 	}
 
-	protected <T> T getByTagName(String tagName, Handler<T, Element> handler) {
+	protected <T> T getByTagName(String tagName, Function<Element, T> handler) {
 		Element element = getChildElement(document.getRoot(), tagName);
 		if (element == null) {
 			return null;
 		}
-		return handler.handle(element);
+		return handler.apply(element);
 	}
 
-	protected <T> List<T> findByTagsPath(String tagsPath, Handler<T, Element> handler) {
+	protected <T> List<T> findByTagsPath(String tagsPath, Function<Element, T> handler) {
 		List<T> list = new ArrayList<>();
 		String[] tagNames = tagsPath.split("\\.");
 
@@ -84,7 +84,7 @@ public abstract class XMLFile {
 		}
 
 		element.findByTag(tagNames[tagNames.length - 1]).forEach(dependency -> {
-			T t = handler.handle(dependency);
+			T t = handler.apply(dependency);
 			if (t != null) {
 				list.add(t);
 			}
