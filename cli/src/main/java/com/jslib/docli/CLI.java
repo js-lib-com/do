@@ -103,7 +103,7 @@ public class CLI implements IShell, IProperties {
 		return Logging.isVerbose() ? new Progress(console, size) : null;
 	}
 
-	public ReturnCode execute(Statement statement) throws Exception {
+	public ReturnCode execute(Statement statement) throws Throwable {
 		log.trace("execute(statement)");
 		log.debug("Statement arguments: %s", statement._arguments());
 

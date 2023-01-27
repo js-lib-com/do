@@ -65,7 +65,7 @@ class ScriptInterpreter implements ITask {
 	}
 
 	@Override
-	public ReturnCode execute(IParameters parameters) throws Exception {
+	public ReturnCode execute(IParameters parameters) throws Throwable {
 		log.trace("execute(parameters)");
 		for (String statement : statements) {
 			log.debug("Execute statement: %s", statement);

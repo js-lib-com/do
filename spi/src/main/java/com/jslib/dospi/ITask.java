@@ -46,7 +46,7 @@ public interface ITask {
 	 */
 	IParameters parameters();
 
-	ReturnCode execute(IParameters parameters) throws Exception;
+	ReturnCode execute(IParameters parameters) throws Throwable;
 
 	ITaskInfo getInfo();
 

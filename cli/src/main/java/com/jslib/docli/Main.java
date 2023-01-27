@@ -59,7 +59,7 @@ public class Main {
 		this.cli = cli;
 	}
 
-	private ReturnCode execute(String... args) throws Exception {
+	private ReturnCode execute(String... args) throws Throwable {
 		log.trace("execute()");
 
 		Statement statement = new Statement(args);

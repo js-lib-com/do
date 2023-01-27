@@ -25,7 +25,7 @@ class JavaProcessor implements IProcessor {
 	}
 
 	@Override
-	public ReturnCode execute(ITask task, IParameters parameters) throws Exception {
+	public ReturnCode execute(ITask task, IParameters parameters) throws Throwable {
 		log.trace("execute(task, parameters)");
 		return task.execute(parameters);
 	}

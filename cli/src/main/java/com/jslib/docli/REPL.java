@@ -17,7 +17,7 @@ public class REPL {
 		this.cli = cli;
 	}
 
-	public void loop() throws Exception {
+	public void loop() throws Throwable {
 		log.trace("loop()");
 		console.println("Do REPL - ver. 0.0.1-SNAPSHOT, July 2021.");
 		console.crlf();

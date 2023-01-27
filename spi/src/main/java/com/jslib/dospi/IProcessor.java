@@ -11,6 +11,6 @@ public interface IProcessor {
 	 */
 	ITask getTask(TaskReference reference);
 
-	ReturnCode execute(ITask task, IParameters parameters) throws Exception;
+	ReturnCode execute(ITask task, IParameters parameters) throws Throwable;
 
 }
