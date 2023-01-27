@@ -35,7 +35,7 @@ class ScriptInterpreter implements ITask {
 		log.debug("Parse script %s", scriptFile);
 		try (BufferedReader reader = new BufferedReader(Files.newBufferedReader(scriptFile))) {
 			// by convention first line is script info
-			info = new ScriptInfo(reader.readLine());
+			info = new ScriptInfo(scriptFile, reader);
 
 			String line;
 			while ((line = reader.readLine()) != null) {

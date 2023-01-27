@@ -17,8 +17,6 @@ public interface IFiles {
 
 	Path getWorkingDir();
 
-	Path getProjectDir();
-
 	String getFileName(Path file);
 
 	List<String> getFileNames(Path dir) throws IOException;

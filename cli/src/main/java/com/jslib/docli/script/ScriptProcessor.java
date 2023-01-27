@@ -1,5 +1,6 @@
 package com.jslib.docli.script;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,6 +29,10 @@ public class ScriptProcessor implements IProcessor {
 		log.trace("getTask(reference)");
 		Path homeDir = Paths.get(Home.getPath());
 		Path scriptFile = homeDir.resolve("script/" + reference.getPath());
+		if (!Files.exists(scriptFile)) {
+			log.warn("Missing file %s", scriptFile);
+			return null;
+		}
 		return new ScriptInterpreter(cli, scriptFile);
 	}
 

@@ -6,6 +6,9 @@ public class Home {
 	public static String getPath() {
 		if (path == null) {
 			path = System.getProperty("HOME_DIR");
+			if(path == null) {
+				throw new IllegalArgumentException("Missing HOME_DIR system property.");
+			}
 		}
 		return path;
 	}

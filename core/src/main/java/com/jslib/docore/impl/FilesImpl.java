@@ -38,7 +38,6 @@ import com.jslib.api.log.Log;
 import com.jslib.api.log.LogFactory;
 import com.jslib.docore.IFiles;
 import com.jslib.docore.IProgress;
-import com.jslib.lang.BugError;
 import com.jslib.util.Params;
 import com.jslib.util.Strings;
 
@@ -57,16 +56,6 @@ class FilesImpl implements IFiles {
 	@Override
 	public Path getWorkingDir() {
 		return fileSystem.getPath("").toAbsolutePath();
-	}
-
-	@Override
-	public Path getProjectDir() {
-		Path projectDir = fileSystem.getPath("").toAbsolutePath();
-		Path propertiesFile = projectDir.resolve(".project.properties");
-		if (!exists(propertiesFile)) {
-			throw new BugError("Invalid project. Missing project properties file %s.", propertiesFile);
-		}
-		return projectDir;
 	}
 
 	@Override

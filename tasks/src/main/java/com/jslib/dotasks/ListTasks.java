@@ -50,7 +50,9 @@ public class ListTasks extends DoTask {
 			for (TaskReference reference : references.get(commandPath)) {
 				IProcessor processor = factory.getProcessor(reference);
 				ITask task = processor.getTask(reference);
-				printout.addTableRow(commandPath, reference.toString(), task.getInfo().getDescription());
+				if (task != null) {
+					printout.addTableRow(commandPath, reference.toString(), task.getInfo().getDescription());
+				}
 			}
 		}
 		printout.display();
