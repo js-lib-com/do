@@ -49,4 +49,10 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <id>js-lib</id>
+      <url>http://hub.gnotis.ro/repository/maven-releases/</url>
+    </repository>
+  </repositories>
 </project>
