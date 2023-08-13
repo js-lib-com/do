@@ -1,10 +1,9 @@
 package com.jslib.docli;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.dospi.TaskAbortException;
 import com.jslib.dospi.UserCancelException;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class REPL {
 	private static final Log log = LogFactory.getLog(REPL.class);
@@ -18,7 +17,7 @@ public class REPL {
 		this.cli = cli;
 	}
 
-	public void loop() throws Exception {
+	public void loop() throws Throwable {
 		log.trace("loop()");
 		console.println("Do REPL - ver. 0.0.1-SNAPSHOT, July 2021.");
 		console.crlf();

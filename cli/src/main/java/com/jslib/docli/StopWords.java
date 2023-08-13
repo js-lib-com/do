@@ -10,13 +10,13 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import js.json.Json;
-import js.lang.GType;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Classes;
+import com.jslib.api.json.Json;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.lang.GType;
+import com.jslib.util.Classes;
 
-public class StopWords implements Iterable<String> {
+class StopWords implements IStopWords {
 	private static final Log log = LogFactory.getLog(StopWords.class);
 
 	private static final String FILE_NAME = "stop-words.json";
@@ -42,18 +42,21 @@ public class StopWords implements Iterable<String> {
 		}
 	}
 
+	@Override
 	public void add(String word) throws IOException {
 		log.trace("add(word)");
 		list.add(word);
 		save();
 	}
 
+	@Override
 	public void remove(String word) throws IOException {
 		log.trace("remove(word)");
 		list.remove(word);
 		save();
 	}
 
+	@Override
 	public boolean contains(String word) {
 		return list.contains(word);
 	}

@@ -1,12 +1,11 @@
 package com.jslib.doprocessor;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
 import com.jslib.dospi.TaskReference;
-
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Params;
+import com.jslib.util.Params;
 
 public class ProcessorFactory implements IProcessorFactory {
 	private static final Log log = LogFactory.getLog(ProcessorFactory.class);
@@ -22,6 +21,9 @@ public class ProcessorFactory implements IProcessorFactory {
 		Params.notNull(reference.getScheme(), "Task reference scheme");
 
 		switch (reference.getScheme()) {
+		case "cmd":
+			return new CmdProcessor();
+			
 		case "java":
 			return new JavaProcessor();
 

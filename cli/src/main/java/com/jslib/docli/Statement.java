@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.util.Strings;
 
 /**
  * A statement is initialized form command line arguments and has a command and optional positional parameters. There are also
@@ -26,7 +26,7 @@ import js.util.Strings;
 public class Statement {
 	private static final Log log = LogFactory.getLog(Statement.class);
 
-	private final StopWords stopWords;
+	private final IStopWords stopWords;
 
 	/** Arguments list, as provided by user on command line. It contains command followed by parameters. */
 	private final List<String> arguments;

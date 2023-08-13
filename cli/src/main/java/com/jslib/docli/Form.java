@@ -6,17 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterException;
+import com.jslib.converter.ConverterRegistry;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IForm;
 import com.jslib.dospi.IFormData;
-
-import js.converter.Converter;
-import js.converter.ConverterException;
-import js.converter.ConverterRegistry;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
-import js.util.Types;
+import com.jslib.util.Strings;
+import com.jslib.util.Types;
 
 public class Form implements IForm {
 	private static final Log log = LogFactory.getLog(Form.class);

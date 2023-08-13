@@ -15,16 +15,15 @@ import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 
-import com.jslib.dospi.TaskReference;
+import com.jslib.api.json.Json;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.dospi.ITasksProvider;
-
-import js.json.Json;
-import js.lang.Callback;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Classes;
-import js.util.Params;
+import com.jslib.dospi.TaskReference;
+import com.jslib.util.Classes;
+import com.jslib.util.Params;
 
 public class TasksRegistry {
 	private static final Log log = LogFactory.getLog(TasksRegistry.class);
@@ -171,14 +170,14 @@ public class TasksRegistry {
 		return search(child, words, listener);
 	}
 
-	public void list(Callback<Command> callback) {
+	public void list(Consumer<Command> callback) {
 		Stack<String> path = new Stack<>();
 		list(root, path, callback);
 	}
 
-	private static void list(Node node, Stack<String> path, Callback<Command> callback) {
+	private static void list(Node node, Stack<String> path, Consumer<Command> callback) {
 		if (node.hasTasks()) {
-			callback.handle(new Command(String.join(" ", path), node.tasks));
+			callback.accept(new Command(String.join(" ", path), node.tasks));
 			return;
 		}
 

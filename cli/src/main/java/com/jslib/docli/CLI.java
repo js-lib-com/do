@@ -1,12 +1,25 @@
 package com.jslib.docli;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Proxy;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.SortedSet;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterException;
+import com.jslib.converter.ConverterRegistry;
 import com.jslib.docli.script.ScriptProcessor;
+import com.jslib.docore.IProgress;
+import com.jslib.docore.IProperties;
 import com.jslib.doprocessor.ProcessorFactory;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IConsole;
@@ -16,7 +29,6 @@ import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
-import com.jslib.dospi.IProgress;
 import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
@@ -24,16 +36,11 @@ import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskAbortException;
 import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.UserCancelException;
+import com.jslib.util.Strings;
+import com.jslib.util.Types;
 
-import js.converter.Converter;
-import js.converter.ConverterException;
-import js.converter.ConverterRegistry;
-import js.log.Log;
-import js.log.LogFactory;
-import js.util.Strings;
-import js.util.Types;
-
-public class CLI implements IShell {
+@Singleton
+public class CLI implements IShell, IProperties {
 	private static final Log log = LogFactory.getLog(CLI.class);
 
 	private static final TaskInfoFormatter TASK_INFO_FOMRATTER = new TaskInfoFormatter();
@@ -42,13 +49,24 @@ public class CLI implements IShell {
 	private final Console console;
 	private final IProcessorFactory processorFactory;
 	private final TasksRegistry registry;
+	private final Properties properties;
 
+	@Inject
 	public CLI(Console console) {
 		log.trace("CLI(console)");
 		this.converter = ConverterRegistry.getConverter();
 		this.console = console;
 		this.processorFactory = new CliProcessorFactory(this);
 		this.registry = new TasksRegistry();
+
+		this.properties = new Properties();
+		Path binDir = Paths.get(Home.getPath()).resolve("bin");
+		Path propertiesFile = binDir.resolve("do.properties");
+		try (Reader reader = Files.newBufferedReader(propertiesFile)) {
+			properties.load(reader);
+		} catch (IOException e) {
+			log.error(e);
+		}
 	}
 
 	@Override
@@ -85,7 +103,7 @@ public class CLI implements IShell {
 		return Logging.isVerbose() ? new Progress(console, size) : null;
 	}
 
-	public ReturnCode execute(Statement statement) throws Exception {
+	public ReturnCode execute(Statement statement) throws Throwable {
 		log.trace("execute(statement)");
 		log.debug("Statement arguments: %s", statement._arguments());
 
@@ -119,7 +137,6 @@ public class CLI implements IShell {
 		}
 
 		log.debug("Executing task %s ...", task);
-		task.setShell(this);
 
 		if (statement.hasTaskHelp()) {
 			MarkdownConsole markdownConsole = new MarkdownConsole(console);
@@ -237,6 +254,11 @@ public class CLI implements IShell {
 	private void onVersion() {
 		log.trace("onVersion()");
 		console.println("Do CLI - 0.0.1-SNAPSHOT");
+	}
+
+	@Override
+	public <T> T getProperty(String key, Class<T> type) {
+		return converter.asObject(properties.getProperty(key), type);
 	}
 
 	private static class CliProcessorFactory extends ProcessorFactory {

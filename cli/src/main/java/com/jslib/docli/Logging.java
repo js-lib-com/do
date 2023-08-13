@@ -1,17 +1,23 @@
 package com.jslib.docli;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-import com.jcabi.log.MulticolorLayout;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.api.LayoutComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 public class Logging {
 	private static boolean verbose = false;
 	private static Level level = null;
 
 	public static void configure(String... args) {
+		level = Level.INFO;
+
 		for (String arg : args) {
 			switch (arg) {
 			case "--trace":
@@ -22,6 +28,11 @@ public class Logging {
 				level = Level.DEBUG;
 				break;
 
+			case "-v":
+			case "--verbose":
+				verbose = true;
+				// fall through --warn case
+
 			case "--warn":
 				level = Level.WARN;
 				break;
@@ -29,33 +40,22 @@ public class Logging {
 			case "--info":
 				level = Level.INFO;
 				break;
-
-			case "-v":
-			case "--verbose":
-				verbose = true;
-				break;
 			}
 		}
 
-		MulticolorLayout layout = new MulticolorLayout();
-		layout.setLevels("TRACE:92,DEBUG:94,WARN:93,INFO:96,ERROR:91");
-		if (level != null) {
-			layout.setConversionPattern("[%color{%-5p}][%color{%c}] %m%n");
-		} else {
-			layout.setConversionPattern("%color{%m}%n");
-			level = verbose ? Level.INFO : Level.WARN;
-		}
+		ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
+		AppenderComponentBuilder console = builder.newAppender("console", "ColorConsoleAppender");
 
-		ConsoleAppender appender = new ConsoleAppender();
-		appender.setName("console");
-		appender.setLayout(layout);
-		appender.setTarget(ConsoleAppender.SYSTEM_OUT);
-		appender.setThreshold(level);
-		appender.activateOptions();
+		LayoutComponentBuilder standard = builder.newLayout("PatternLayout");
+		standard.addAttribute("pattern", "[%highlight{%-5p}][%highlight{%c}] %m%n");
+		console.add(standard);
 
-		Logger root = LogManager.getRootLogger();
-		root.setLevel(Level.ALL);
-		root.addAppender(appender);
+		RootLoggerComponentBuilder rootLogger = builder.newRootLogger(level);
+		rootLogger.add(builder.newAppenderRef("console"));
+
+		builder.add(console);
+		builder.add(rootLogger);
+		Configurator.reconfigure(builder.build());
 	}
 
 	public static void setVerbose(boolean verbose) {
@@ -63,8 +63,7 @@ public class Logging {
 		Logging.level = verbose ? Level.INFO : Level.WARN;
 
 		Logger root = LogManager.getRootLogger();
-		ConsoleAppender appender = (ConsoleAppender) root.getAppender("console");
-		appender.setThreshold(Logging.level);
+		Configurator.setLevel(root.getName(), level);
 	}
 
 	public static boolean isVerbose() {

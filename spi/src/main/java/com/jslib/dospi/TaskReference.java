@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import js.json.JsonException;
-import js.json.JsonLifeCycle;
+import com.jslib.api.json.JsonException;
+import com.jslib.api.json.JsonLifeCycle;
 
 /**
  * Immutable value class for task references. This class is a URI constrained to specifics of task referencing: it has only

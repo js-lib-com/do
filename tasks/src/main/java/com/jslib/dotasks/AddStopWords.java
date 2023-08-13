@@ -2,21 +2,24 @@ package com.jslib.dotasks;
 
 import java.io.IOException;
 
-import com.jslib.docli.StopWords;
+import javax.inject.Inject;
+
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
+import com.jslib.docli.IStopWords;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.ReturnCode;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class AddStopWords extends DoTask {
 	private static final Log log = LogFactory.getLog(AddStopWords.class);
 
-	private final StopWords stopWords;
+	private final IStopWords stopWords;
 
-	public AddStopWords() throws IOException {
-		log.trace("AddStopWords()");
-		this.stopWords = new StopWords();
+	@Inject
+	public AddStopWords(IStopWords stopWords) throws IOException {
+		super();
+		log.trace("AddStopWords(stopWords)");
+		this.stopWords = stopWords;
 	}
 
 	@Override

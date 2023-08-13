@@ -4,24 +4,30 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeMap;
 
+import javax.inject.Inject;
+
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docli.TasksRegistry;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IPrintout;
 import com.jslib.dospi.IProcessor;
 import com.jslib.dospi.IProcessorFactory;
+import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
-import com.jslib.dospi.TaskReference;
 import com.jslib.dospi.ReturnCode;
-
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.dospi.TaskReference;
 
 public class ListTasks extends DoTask {
 	private static final Log log = LogFactory.getLog(ListTasks.class);
 
-	public ListTasks() {
+	private final IShell shell;
+
+	@Inject
+	public ListTasks(IShell shell) {
 		super();
-		log.trace("ListTasks()");
+		log.trace("ListTasks(shell)");
+		this.shell = shell;
 	}
 
 	@Override
@@ -44,7 +50,9 @@ public class ListTasks extends DoTask {
 			for (TaskReference reference : references.get(commandPath)) {
 				IProcessor processor = factory.getProcessor(reference);
 				ITask task = processor.getTask(reference);
-				printout.addTableRow(commandPath, reference.toString(), task.getInfo().getDescription());
+				if (task != null) {
+					printout.addTableRow(commandPath, reference.toString(), task.getInfo().getDescription());
+				}
 			}
 		}
 		printout.display();

@@ -4,25 +4,32 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+import javax.inject.Inject;
+
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import com.jslib.docli.TasksRegistry;
+import com.jslib.docore.IFiles;
 import com.jslib.dospi.Flags;
 import com.jslib.dospi.IParameters;
+import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITasksProvider;
 import com.jslib.dospi.ReturnCode;
 import com.jslib.dospi.TaskReference;
-import com.jslib.dospi.util.FileUtils;
-
-import js.log.Log;
-import js.log.LogFactory;
 
 public class ImportTasks extends DoTask {
 	private static final Log log = LogFactory.getLog(ImportTasks.class);
 
-	private final FileUtils files;
+	private final IFiles files;
+	private final Path scriptDir;
 
-	public ImportTasks() {
-		log.trace("ImportTasks()");
-		this.files = new FileUtils();
+	@Inject
+	public ImportTasks(IShell shell, IFiles files) {
+		log.trace("ImportTasks(shell, files)");
+		this.files = files;
+
+		Path homeDir = shell.getHomeDir();
+		this.scriptDir = homeDir.resolve("script");
 	}
 
 	@Override
@@ -38,9 +45,6 @@ public class ImportTasks extends DoTask {
 		log.trace("execute(parameters)");
 		TasksRegistry registry = new TasksRegistry();
 		registry.load();
-
-		Path homeDir = shell.getHomeDir();
-		Path scriptDir = homeDir.resolve("script");
 
 		String providerName = parameters.get("provider-name");
 		for (ITasksProvider provider : ServiceLoader.load(ITasksProvider.class)) {

@@ -3,9 +3,9 @@ package com.jslib.doprocessor;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import com.jslib.dospi.AbstractTask;
 import com.jslib.dospi.IParameters;
 import com.jslib.dospi.IProcessor;
-import com.jslib.dospi.IShell;
 import com.jslib.dospi.ITask;
 import com.jslib.dospi.ITaskInfo;
 import com.jslib.dospi.ReturnCode;
@@ -22,24 +22,15 @@ public abstract class Processor implements IProcessor {
 	 * 
 	 * @author Iulian Rotaru
 	 */
-	private static class TaskProxy implements ITask {
-		@Override
-		public void setShell(IShell shell) {
-		}
-
+	private static class TaskProxy extends AbstractTask {
 		@Override
 		public boolean isExecutionContext() {
 			return true;
 		}
 
 		@Override
-		public IParameters parameters() {
-			return null;
-		}
-
-		@Override
 		public ReturnCode execute(IParameters parameters) throws Exception {
-			return null;
+			return ReturnCode.SUCCESS;
 		}
 
 		@Override
@@ -56,27 +47,27 @@ public abstract class Processor implements IProcessor {
 	private static class TaskInfo implements ITaskInfo {
 		@Override
 		public String getDisplay() {
-			return null;
+			return "Task Display";
 		}
 
 		@Override
 		public String getDescription() {
-			return null;
+			return "Task description.";
 		}
 
 		@Override
 		public String getVersion() {
-			return null;
+			return "1.0";
 		}
 
 		@Override
 		public LocalDate getLastUpdate() {
-			return null;
+			return LocalDate.now();
 		}
 
 		@Override
 		public String getAuthor() {
-			return null;
+			return "Iulian Rotaru";
 		}
 	}
 }

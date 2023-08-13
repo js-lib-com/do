@@ -1,8 +1,7 @@
 package com.jslib.docli;
 
-import com.jslib.dospi.IProgress;
-
-import js.util.Params;
+import com.jslib.docore.IProgress;
+import com.jslib.util.Params;
 
 public class Progress implements IProgress<Integer> {
 	private final Console console;

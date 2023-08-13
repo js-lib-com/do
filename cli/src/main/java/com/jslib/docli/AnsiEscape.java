@@ -1,5 +1,6 @@
 package com.jslib.docli;
 
+import com.jslib.util.Strings;
 
 public enum AnsiEscape {
 	BOLD(1), ITALIC(3), UNDERLINE(4), REVERSE(7), STRIKE(9), // font styles
@@ -17,5 +18,13 @@ public enum AnsiEscape {
 
 	public int code() {
 		return code;
+	}
+	
+	public String start() {
+		return Strings.concat("\u001B[", code, 'm');
+	}
+	
+	public static String end() {
+		return "\u001B[0m";
 	}
 }

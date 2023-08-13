@@ -1,4 +1,4 @@
-package com.jslib.dospi;
+package com.jslib.docore;
 
 @FunctionalInterface
 public interface IProgress<T> {

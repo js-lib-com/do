@@ -234,6 +234,7 @@ public class Printout implements IPrintout, InvocationHandler {
 	public void display() {
 		try {
 			console.print(builder.toString());
+			builder.setLength(0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

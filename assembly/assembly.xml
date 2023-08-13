@@ -34,6 +34,10 @@
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<file>
+			<source>target/do.dependencies</source>
+			<outputDirectory>bin</outputDirectory>
+		</file>
+		<file>
 			<source>../cli/target/do-cli-${project.version}.jar</source>
 			<outputDirectory>bin</outputDirectory>
 		</file>
@@ -49,6 +53,7 @@
 			<excludes>
 				<exclude>${project.groupId}:${project.artifactId}:jar:*</exclude>
 				<exclude>${project.groupId}:do-cli:jar:*</exclude>
+				<exclude>${project.groupId}:do-update:jar:*</exclude>
 			</excludes>
 		</dependencySet>
 	</dependencySets>

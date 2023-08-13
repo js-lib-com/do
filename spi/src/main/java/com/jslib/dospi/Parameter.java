@@ -1,9 +1,9 @@
 package com.jslib.dospi;
 
-import js.converter.Converter;
-import js.converter.ConverterRegistry;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterRegistry;
 
-public class Parameter<T> implements IParameterDefinition<T> {
+class Parameter<T> implements IParameterDefinition<T> {
 	private static final Converter converter = ConverterRegistry.getConverter();
 	
 	private final int position;

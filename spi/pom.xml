@@ -5,25 +5,15 @@
 	<parent>
 		<groupId>com.js-lib.do</groupId>
 		<artifactId>do-pom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>do-spi</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.js-lib</groupId>
-			<artifactId>js-dom-api</artifactId>
-			<version>1.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>4.5.12</version>
+			<groupId>com.js-lib.do</groupId>
+			<artifactId>do-core</artifactId>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
